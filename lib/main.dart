@@ -17,7 +17,6 @@ class VozApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: AppColors.background,
-        // تصفير الألوان الافتراضية للـ AppBar والـ BottomNavigationBar
         appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.background,
           elevation: 0,
