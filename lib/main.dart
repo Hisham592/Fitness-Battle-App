@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:voz_app/features/onboarding_auth/presentation/screens/onboarding_screen.dart';
 import 'core/theme/app_colors.dart';
 
 void main() {
@@ -33,14 +34,7 @@ class VozApp extends StatelessWidget {
               unselectedItemColor: AppColors.textSecondary,
             ),
           ),
-          home: const Scaffold(
-            body: Center(
-              child: Text(
-                'VOZ App Initialized',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
+          home: OnboardingScreen(),
         );
       },
     );

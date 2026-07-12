@@ -39,6 +39,7 @@ dependencies:
   go_router: ^17.3.0
   lottie: ^3.4.0
   font_awesome_flutter: ^11.0.0
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:
@@ -72,15 +73,15 @@ flutter:
   fonts:
     - family: VOZFont
       fonts:
-        - asset: assets/fonts/Rajdhani-Light.ttf
+        - asset: fonts/Rajdhani-Light.ttf
           weight: 300
-        - asset: assets/fonts/Rajdhani-Regular.ttf
+        - asset: fonts/Rajdhani-Regular.ttf
           weight: 400
-        - asset: assets/fonts/Rajdhani-Medium.ttf
+        - asset: fonts/Rajdhani-Medium.ttf
           weight: 500
-        - asset: assets/fonts/Rajdhani-SemiBold.ttf
+        - asset: fonts/Rajdhani-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/Rajdhani-Bold.ttf
+        - asset: fonts/Rajdhani-Bold.ttf
           weight: 700
 
 
