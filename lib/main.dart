@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'core/theme/app_colors.dart';
+import 'features/nutrition/presentation/screens/smart_nutrition_screen.dart';
 
 void main() {
   runApp(const VozApp());
@@ -22,7 +23,7 @@ class VozApp extends StatelessWidget {
           theme: ThemeData(
             brightness: Brightness.dark,
             scaffoldBackgroundColor: AppColors.background,
-            fontFamily: 'Rajdhani',
+            fontFamily: 'VOZFont',
             appBarTheme: const AppBarTheme(
               backgroundColor: AppColors.background,
               elevation: 0,
@@ -33,14 +34,7 @@ class VozApp extends StatelessWidget {
               unselectedItemColor: AppColors.textSecondary,
             ),
           ),
-          home: const Scaffold(
-            body: Center(
-              child: Text(
-                'VOZ App Initialized',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
+          home: const SmartNutritionScreen(),
         );
       },
     );
