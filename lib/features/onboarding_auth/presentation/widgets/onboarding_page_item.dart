@@ -52,7 +52,7 @@ class OnboardingPageItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.r),
                 image: DecorationImage(
                   image: AssetImage(item.imagePath),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
