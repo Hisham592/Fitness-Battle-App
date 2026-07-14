@@ -11,8 +11,7 @@ class MealDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color dynamicDishColor =
-        meal.containerColor ?? AppColors.cardBackground;
+    final Color dynamicDishColor = meal.containerColor;
 
     return Scaffold(
       body: SafeArea(
@@ -185,104 +184,6 @@ class MealDetailsScreen extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ),
-                  ),
-
-                  Positioned(
-                    left: 20.w,
-                    right: 20.w,
-                    bottom: 25.h,
-                    child: SizedBox(
-                      height: 52.h,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6.r),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xffDF00FF).withOpacity(0.25),
-                              offset: const Offset(0, 0),
-                              blurRadius: 48.r,
-                              spreadRadius: 0,
-                            ),
-                            BoxShadow(
-                              color: const Color(0xffDF00FF).withOpacity(0.60),
-                              offset: const Offset(0, 0),
-                              blurRadius: 24.r,
-                              spreadRadius: 0,
-                            ),
-                          ],
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryNeon,
-                            foregroundColor: const Color(0xFF111111),
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6.r),
-                            ),
-                          ),
-                          onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: const Color(
-                                0xFF1C1C1C,
-                              ), // Matches your card backgrounds
-                              behavior: SnackBarBehavior
-                                  .floating, // Allows radius and margin configurations
-                              elevation: 4,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.r),
-                                side: const BorderSide(
-                                  color: Color(
-                                    0xffDF00FF,
-                                  ), // Your signature neon purple accent border
-                                  width: 1,
-                                ),
-                              ),
-                              margin: EdgeInsets.only(
-                                bottom: 90
-                                    .h, // Clear height to prevent overlapping the floating action button
-                                left: 20.w,
-                                right: 20.w,
-                              ),
-                              duration: const Duration(seconds: 2),
-                              content: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.check_circle_rounded,
-                                    color: Color(0xffDF00FF),
-                                    size: 20,
-                                  ),
-                                  SizedBox(width: 12.w),
-                                  Expanded(
-                                    child: Text(
-                                      '${meal.title.toUpperCase()} MARKED!',
-                                      style: TextStyle(
-                                        fontSize: 13.sp,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.white.withOpacity(0.95),
-                                        letterSpacing: 0.5,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'MARK MEAL AS EATEN →',
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1.96,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                     ),
                   ),
                 ],
