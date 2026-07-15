@@ -53,16 +53,20 @@ class CustomAuthTextField extends StatelessWidget {
               horizontal: 16.w,
               vertical: 16.h,
             ),
+
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.r),
+              borderSide: BorderSide(color: Color(0XFF2E2E2E), width: 1.w),
+            ),
+
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.r),
-              borderSide: BorderSide.none,
+              borderSide: BorderSide(color: Color(0XFF2E2E2E), width: 1.w),
             ),
+
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.r),
-              borderSide: BorderSide(
-                color: AppColors.primaryNeon.withValues(alpha: 0.5),
-                width: 1.w,
-              ),
+              borderSide: BorderSide(color: AppColors.primaryNeon, width: 1.w),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.r),

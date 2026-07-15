@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:voz_app/core/theme/app_colors.dart';
 import 'package:voz_app/features/onboarding_auth/data/models/onboarding_model.dart';
-import 'package:voz_app/features/onboarding_auth/presentation/screens/sign_up_screen.dart';
+import 'package:voz_app/features/onboarding_auth/presentation/screens/sign_in_screen.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/widgets/onboarding_page_item.dart';
-
-import 'user_level_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -43,7 +41,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     } else {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const SignUpScreen()),
+        MaterialPageRoute(builder: (context) => const SignInScreen()),
       );
     }
   }

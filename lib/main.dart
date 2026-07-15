@@ -31,6 +31,7 @@ class VozApp extends StatelessWidget {
             scaffoldBackgroundColor: AppColors.background,
             fontFamily: 'VOZFont',
             appBarTheme: const AppBarTheme(
+              surfaceTintColor: Colors.transparent,
               backgroundColor: AppColors.background,
               elevation: 0,
             ),
@@ -40,7 +41,7 @@ class VozApp extends StatelessWidget {
               unselectedItemColor: AppColors.textSecondary,
             ),
           ),
-          home: UserLevelScreen(),
+          home: OnboardingScreen(),
         );
       },
     );
