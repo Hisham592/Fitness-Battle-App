@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:voz_app/core/theme/app_colors.dart';
 import 'package:voz_app/core/widgets/custom_neon_button.dart';
+import 'package:voz_app/features/onboarding_auth/logic/auth_cubit/auth_cubit.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/screens/user_level_screen.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/widgets/custom_auth_text_field.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/screens/sign_in_screen.dart';
@@ -165,6 +166,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           text: 'Register',
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
+                              context.read<AuthCubit>().saveTempCredentials(
+                                name: _nameController.text.trim(),
+                                email: _emailController.text.trim(),
+                                password: _passwordController.text.trim(),
+                              );
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

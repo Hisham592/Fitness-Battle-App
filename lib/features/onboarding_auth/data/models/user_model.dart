@@ -1,5 +1,6 @@
 class UserModel {
   final String uid;
+  final String name;
   final String email;
   final String level;
   final int xp;
@@ -8,6 +9,7 @@ class UserModel {
 
   UserModel({
     required this.uid,
+    required this.name,
     required this.email,
     required this.level,
     int? xp,
@@ -31,6 +33,7 @@ class UserModel {
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
+      'name': name,
       'email': email,
       'level': level,
       'xp': xp,
@@ -42,6 +45,7 @@ class UserModel {
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       uid: map['uid'] ?? '',
+      name: map['name'] ?? '',
       email: map['email'] ?? '',
       level: map['level'] ?? 'Beginner',
       xp: map['xp'] ?? 0,

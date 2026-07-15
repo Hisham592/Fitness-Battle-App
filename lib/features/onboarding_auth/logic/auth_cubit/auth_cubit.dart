@@ -7,17 +7,23 @@ class AuthCubit extends Cubit<AuthState> {
   final AuthFirebaseService _authFirebaseService;
   AuthCubit(this._authFirebaseService) : super(AuthInitial());
 
+  String? _tempName;
   String? _tempEmail;
   String? _tempPassword;
 
-  void saveTempCredentials({required String email, required String password}) {
+  void saveTempCredentials({
+    required String name,
+    required String email,
+    required String password,
+  }) {
+    _tempName = name;
     _tempEmail = email;
     _tempPassword = password;
   }
 
   Future<void> registerAndSaveUser({required String selectedLevel}) async {
-    if (_tempEmail == null || _tempPassword == null) {
-      emit(AuthFailur(message: 'Missing Email or Password'));
+    if (_tempName == null || _tempEmail == null || _tempPassword == null) {
+      emit(AuthFailur(message: 'Missing required information'));
       return;
     }
 
@@ -31,6 +37,7 @@ class AuthCubit extends Cubit<AuthState> {
       if (user != null) {
         final userModel = UserModel(
           uid: user.uid,
+          name: _tempName!,
           email: _tempEmail!,
           level: selectedLevel,
         );
@@ -40,6 +47,33 @@ class AuthCubit extends Cubit<AuthState> {
       } else {
         emit(AuthFailur(message: 'User creation failed'));
       }
+    } catch (e) {
+      emit(AuthFailur(message: e.toString()));
+    }
+  }
+
+  Future<void> signIn({required String email, required String password}) async {
+    emit(AuthLoading());
+    try {
+      final user = await _authFirebaseService.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      if (user != null) {
+        emit(AuthSuccess());
+      } else {
+        emit(AuthFailur(message: 'Login failed'));
+      }
+    } catch (e) {
+      emit(AuthFailur(message: e.toString()));
+    }
+  }
+
+  Future<void> resetPassword({required String email}) async {
+    emit(AuthLoading());
+    try {
+      await _authFirebaseService.sendPasswordResetEmail(email: email);
+      emit(AuthSuccess());
     } catch (e) {
       emit(AuthFailur(message: e.toString()));
     }

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:voz_app/core/widgets/custom_neon_button.dart';
+import 'package:voz_app/core/widgets/custom_snackbar.dart';
+import 'package:voz_app/features/onboarding_auth/logic/auth_cubit/auth_cubit.dart';
+import 'package:voz_app/features/onboarding_auth/logic/auth_cubit/auth_state.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/screens/reset_password_screen.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/screens/sign_up_screen.dart';
+import 'package:voz_app/features/onboarding_auth/presentation/screens/temp_dashboard_screen.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/widgets/custom_auth_text_field.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -183,10 +188,41 @@ class _SignInScreenState extends State<SignInScreen> {
                       const Spacer(),
                       Padding(
                         padding: EdgeInsets.only(bottom: 20.h, top: 20.h),
-                        child: CustomNeonButton(
-                          text: 'Login',
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {}
+                        child: BlocConsumer<AuthCubit, AuthState>(
+                          listener: (context, state) {
+                            if (state is AuthSuccess) {
+                              CustomSnackBar.showSuccess(
+                                context,
+                                'Welcome back!',
+                              );
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const TempDashboardScreen(),
+                                ),
+                                (route) => false,
+                              );
+                            } else if (state is AuthFailur) {
+                              CustomSnackBar.showError(context, state.message);
+                            }
+                          },
+                          builder: (context, state) {
+                            final isLoading = state is AuthLoading;
+                            return CustomNeonButton(
+                              text: isLoading ? 'Logging in...' : 'Login',
+                              onPressed: isLoading
+                                  ? () {}
+                                  : () {
+                                      if (_formKey.currentState!.validate()) {
+                                        context.read<AuthCubit>().signIn(
+                                          email: _emailController.text.trim(),
+                                          password: _passwordController.text
+                                              .trim(),
+                                        );
+                                      }
+                                    },
+                            );
                           },
                         ),
                       ),

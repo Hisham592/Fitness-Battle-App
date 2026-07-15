@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:voz_app/core/theme/app_colors.dart';
+import 'package:voz_app/core/widgets/custom_snackbar.dart';
 import 'package:voz_app/features/onboarding_auth/data/models/levels_model.dart';
+import 'package:voz_app/features/onboarding_auth/logic/auth_cubit/auth_cubit.dart';
+import 'package:voz_app/features/onboarding_auth/logic/auth_cubit/auth_state.dart';
+import 'package:voz_app/features/onboarding_auth/presentation/screens/temp_dashboard_screen.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/widgets/level_card.dart';
 
 class UserLevelScreen extends StatefulWidget {
@@ -54,7 +59,6 @@ class _UserLevelScreenState extends State<UserLevelScreen> {
               ),
             ),
             SizedBox(height: 24.h),
-
             Expanded(
               child: ListView.separated(
                 itemCount: levels.length,
@@ -77,48 +81,87 @@ class _UserLevelScreenState extends State<UserLevelScreen> {
                 },
               ),
             ),
-
             SafeArea(
               child: Padding(
                 padding: EdgeInsets.only(bottom: 20.h),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: double.infinity,
-                  height: 50.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    boxShadow: isButtonEnabled
-                        ? [
-                            BoxShadow(
-                              color: AppColors.primaryNeon.withValues(
-                                alpha: 0.4,
-                              ),
-                              blurRadius: 15.r,
-                              spreadRadius: 1.r,
-                              offset: const Offset(0, 4),
-                            ),
-                          ]
-                        : [],
-                  ),
-                  child: ElevatedButton(
-                    onPressed: isButtonEnabled ? () {} : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryNeon,
-                      disabledBackgroundColor: Color(0XFF1E1E1E),
-                      shape: RoundedRectangleBorder(
+                child: BlocConsumer<AuthCubit, AuthState>(
+                  listener: (context, state) {
+                    if (state is AuthSuccess) {
+                      CustomSnackBar.showSuccess(
+                        context,
+                        'Account Created Successfully!',
+                      );
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TempDashboardScreen(),
+                        ),
+                        (route) => false,
+                      );
+                    } else if (state is AuthFailur) {
+                      CustomSnackBar.showError(context, state.message);
+                    }
+                  },
+                  builder: (context, state) {
+                    final isLoading = state is AuthLoading;
+
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      width: double.infinity,
+                      height: 50.h,
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.r),
+                        boxShadow: isButtonEnabled && !isLoading
+                            ? [
+                                BoxShadow(
+                                  color: AppColors.primaryNeon.withValues(
+                                    alpha: 0.4,
+                                  ),
+                                  blurRadius: 15.r,
+                                  spreadRadius: 1.r,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ]
+                            : [],
                       ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      "CONTINUE",
-                      style: TextStyle(
-                        color: isButtonEnabled ? Colors.black : Colors.grey,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
+                      child: ElevatedButton(
+                        onPressed: isButtonEnabled && !isLoading
+                            ? () {
+                                context.read<AuthCubit>().registerAndSaveUser(
+                                  selectedLevel: selectedLevel!.title,
+                                );
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryNeon,
+                          disabledBackgroundColor: const Color(0XFF1E1E1E),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: isLoading
+                            ? SizedBox(
+                                width: 24.w,
+                                height: 24.h,
+                                child: const CircularProgressIndicator(
+                                  color: Colors.black,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Text(
+                                "CONTINUE",
+                                style: TextStyle(
+                                  color: isButtonEnabled
+                                      ? Colors.black
+                                      : Colors.grey,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
             ),
