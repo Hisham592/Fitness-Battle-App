@@ -15,14 +15,14 @@ class OnboardingPageItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 20.h),
+          SizedBox(height: 24.h),
 
           Text(
             item.subTitle,
             style: TextStyle(
               color: AppColors.primaryNeon,
               fontSize: 12.sp,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.normal,
               letterSpacing: 1.2,
             ),
           ),
@@ -43,19 +43,14 @@ class OnboardingPageItem extends StatelessWidget {
             item.description,
             style: TextStyle(color: AppColors.textSecondary, fontSize: 13.sp),
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: 18.h),
 
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                image: DecorationImage(
-                  image: AssetImage(item.imagePath),
-                  fit: BoxFit.contain,
-                ),
-              ),
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r),
             ),
+            child: Image.asset(item.imagePath, fit: BoxFit.contain),
           ),
         ],
       ),

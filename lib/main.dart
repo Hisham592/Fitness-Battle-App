@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/screens/onboarding_screen.dart';
+import 'package:voz_app/features/onboarding_auth/presentation/screens/user_level_screen.dart';
 import 'core/theme/app_colors.dart';
 
 void main() {
@@ -23,7 +24,7 @@ class VozApp extends StatelessWidget {
           theme: ThemeData(
             brightness: Brightness.dark,
             scaffoldBackgroundColor: AppColors.background,
-            fontFamily: 'Rajdhani',
+            fontFamily: 'VOZFont',
             appBarTheme: const AppBarTheme(
               backgroundColor: AppColors.background,
               elevation: 0,
@@ -34,7 +35,7 @@ class VozApp extends StatelessWidget {
               unselectedItemColor: AppColors.textSecondary,
             ),
           ),
-          home: OnboardingScreen(),
+          home: UserLevelScreen(),
         );
       },
     );
