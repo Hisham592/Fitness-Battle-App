@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:voz_app/core/theme/app_colors.dart';
+import 'package:voz_app/features/onboarding_auth/data/models/levels_model.dart';
+import 'package:voz_app/features/onboarding_auth/presentation/widgets/level_card.dart';
 
-class UserLevelScreen extends StatelessWidget {
+class UserLevelScreen extends StatefulWidget {
   const UserLevelScreen({super.key});
 
   @override
+  State<UserLevelScreen> createState() => _UserLevelScreenState();
+}
+
+class _UserLevelScreenState extends State<UserLevelScreen> {
+  Level? selectedLevel;
+
+  @override
   Widget build(BuildContext context) {
+    final isButtonEnabled = selectedLevel != null;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -33,6 +44,7 @@ class UserLevelScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            SizedBox(height: 4.h),
             Text(
               "We'll build the perfect programme for your level.",
               style: TextStyle(
@@ -41,55 +53,73 @@ class UserLevelScreen extends StatelessWidget {
                 fontWeight: FontWeight.normal,
               ),
             ),
-            SizedBox(height: 12.h),
-            Container(
-              height: 88.h,
-              width: double.infinity,
-              padding: EdgeInsets.all(18.w),
-              decoration: BoxDecoration(
-                color: AppColors.cardBackground,
-                borderRadius: BorderRadius.circular(10.r),
-                border: Border.all(color: Color(0XFF2E2E2E)),
+            SizedBox(height: 24.h),
+
+            Expanded(
+              child: ListView.separated(
+                itemCount: levels.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                itemBuilder: (context, index) {
+                  final level = levels[index];
+                  final isSelected = selectedLevel == level;
+
+                  return LevelCard(
+                    level: level,
+                    isSelected: isSelected,
+                    onTap: () {
+                      setState(() {
+                        selectedLevel = selectedLevel == level ? null : level;
+                      });
+                    },
+                  );
+                },
               ),
-              child: Row(
-                spacing: 16.w,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8.w),
-                    width: 48.w,
-                    height: 48.h,
-                    decoration: BoxDecoration(
-                      color: Color(0XFF222222),
-                      borderRadius: BorderRadius.circular(10.r),
+            ),
+
+            SafeArea(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 20.h),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: double.infinity,
+                  height: 50.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.r),
+                    boxShadow: isButtonEnabled
+                        ? [
+                            BoxShadow(
+                              color: AppColors.primaryNeon.withValues(
+                                alpha: 0.4,
+                              ),
+                              blurRadius: 15.r,
+                              spreadRadius: 1.r,
+                              offset: const Offset(0, 4),
+                            ),
+                          ]
+                        : [],
+                  ),
+                  child: ElevatedButton(
+                    onPressed: isButtonEnabled ? () {} : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryNeon,
+                      disabledBackgroundColor: Color(0XFF1E1E1E),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      elevation: 0,
                     ),
-                    child: Image.asset(
-                      "assets/images/voltIcon.png",
-                      fit: BoxFit.contain,
+                    child: Text(
+                      "CONTINUE",
+                      style: TextStyle(
+                        color: isButtonEnabled ? Colors.black : Colors.grey,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 8.h,
-                    children: [
-                      Text(
-                        "BEGINNER",
-                        style: TextStyle(
-                          color: AppColors.textPrimary,
-                          fontSize: 17.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "0 – 6 months experience",
-                        style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                ),
               ),
             ),
           ],

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "41079748624",
+    "project_id": "vozapp-1350a",
+    "storage_bucket": "vozapp-1350a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41079748624:android:802a051ff254861524b295",
+        "android_client_info": {
+          "package_name": "com.example.voz_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCP8cH1Lr3RNWnaF_l02Q1slXgnmXHj2k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

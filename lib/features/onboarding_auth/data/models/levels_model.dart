@@ -19,7 +19,7 @@ List<Level> levels = [
   Level(
     title: 'Intermediate',
     description: '6 months - 1 year ',
-    imagePath: 'assets/images/ireIcon.png',
+    imagePath: 'assets/images/fireIcon.png',
   ),
   Level(
     title: 'Advanced',
