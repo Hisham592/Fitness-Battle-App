@@ -46,6 +46,8 @@ class _ProgressRingState extends State<ProgressRing>
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return SizedBox(
       width: widget.size,
       height: widget.size,
@@ -60,6 +62,7 @@ class _ProgressRingState extends State<ProgressRing>
                 painter: _RingPainter(
                   progress: _animation.value,
                   strokeWidth: widget.strokeWidth,
+                  primaryColor: primaryColor,
                 ),
               );
             },
@@ -77,13 +80,13 @@ class _ProgressRingState extends State<ProgressRing>
                 ),
               ),
               const SizedBox(height: 2),
-              const Text(
+              Text(
                 'COMPLETED',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 11,
                   letterSpacing: 2,
-                  color: AppColors.pink,
+                  color: primaryColor,
                 ),
               ),
             ],
@@ -97,8 +100,13 @@ class _ProgressRingState extends State<ProgressRing>
 class _RingPainter extends CustomPainter {
   final double progress;
   final double strokeWidth;
+  final Color primaryColor;
 
-  _RingPainter({required this.progress, required this.strokeWidth});
+  _RingPainter({
+    required this.progress,
+    required this.strokeWidth,
+    required this.primaryColor,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -113,14 +121,14 @@ class _RingPainter extends CustomPainter {
     canvas.drawCircle(center, radius, bgPaint);
 
     final glowPaint = Paint()
-      ..color = AppColors.pink.withValues(alpha: 0.7)
+      ..color = primaryColor.withValues(alpha: 0.7)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
 
     final fgPaint = Paint()
-      ..color = AppColors.pink
+      ..color = primaryColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
@@ -135,5 +143,5 @@ class _RingPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _RingPainter oldDelegate) =>
-      oldDelegate.progress != progress;
+      oldDelegate.progress != progress || oldDelegate.primaryColor != primaryColor;
 }

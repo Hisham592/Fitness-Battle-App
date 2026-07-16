@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:voz_app/core/theme/app_colors.dart';
+import 'package:voz_app/core/widgets/appbar_title_widget.dart';
 import 'package:voz_app/features/workout/data.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -23,13 +24,27 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
+      appBar: AppBar(
+        title: const AppBarTitleWidget(title: "EXERCISE DETAILS"),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(1.h),
+          child: Container(
+            height: 1.h,
+            color: Colors.grey.withValues(alpha: 0.3),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            _TopBar(onBack: () => Navigator.of(context).maybePop()),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -39,12 +54,12 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                       widget.exercise.name,
                       style: TextStyle(
                         color: AppColors.textPrimary,
-                        fontSize: 27.sp,
+                        fontSize: 26.sp,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.8,
                       ),
                     ),
-                    SizedBox(height: 15.h),
+                    SizedBox(height: 14.h),
                     Row(
                       children: [
                         _Tag('${widget.exercise.sets} SETS'),
@@ -73,7 +88,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                             emoji: '💪',
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Expanded(
                           child: _MuscleCard(
                             label: 'SECONDARY',
@@ -88,47 +103,13 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+              padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 20.h),
               child: _StartTimerButton(
                 onPressed: widget.onStartTimer ?? () {},
-                colors: const [Colors.pink, AppColors.primaryNeon],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _TopBar extends StatelessWidget {
-  const _TopBar({required this.onBack});
-  final VoidCallback onBack;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-      child: Row(
-        children: [
-          IconButton(
-            onPressed: onBack,
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-          ),
-          Expanded(
-            child: Text(
-              'EXERCISE',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 2,
-              ),
-            ),
-          ),
-          SizedBox(width: 48.w),
-        ],
       ),
     );
   }
@@ -173,12 +154,36 @@ class _VideoPreviewState extends State<_VideoPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: YoutubePlayer(
-          controller: _controller,
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16.r),
+        child: AspectRatio(
+          aspectRatio: 16 / 9,
+          child: StreamBuilder<YoutubePlayerValue>(
+            stream: _controller.stream,
+            builder: (context, snapshot) {
+              final state = snapshot.data?.playerState;
+              final bool isReady = state == PlayerState.playing ||
+                  state == PlayerState.paused ||
+                  state == PlayerState.cued ||
+                  state == PlayerState.ended;
+
+              if (isReady) {
+                return YoutubePlayer(controller: _controller);
+              }
+
+              return Center(
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -197,17 +202,22 @@ class _Tag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: AppColors.timerback.withValues(alpha: 0.10),
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: const Color(0xff4D0C56), width: 1.w),
+        color: primaryColor.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(6.r),
+        border: Border.all(
+          color: primaryColor.withValues(alpha: 0.35),
+          width: 1.w,
+        ),
       ),
       child: Text(
         label,
         style: TextStyle(
-          color: AppColors.primaryNeon,
+          color: primaryColor,
           fontSize: 12.sp,
           fontWeight: FontWeight.w700,
         ),
@@ -229,12 +239,14 @@ class _MuscleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
         color: AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xff2C2C2C)),
+        borderRadius: BorderRadius.circular(14.r),
+        border: Border.all(color: AppColors.border, width: 1.w),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,10 +254,10 @@ class _MuscleCard extends StatelessWidget {
           Text(
             label.toUpperCase(),
             style: TextStyle(
-              color: AppColors.primaryNeon,
-              fontSize: 9.sp,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 1.26,
+              color: primaryColor,
+              fontSize: 10.sp,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.2,
             ),
           ),
           SizedBox(height: 10.h),
@@ -253,12 +265,13 @@ class _MuscleCard extends StatelessWidget {
             children: [
               Text(emoji, style: TextStyle(fontSize: 22.sp)),
               SizedBox(width: 8.w),
-              Flexible(
+              Expanded(
                 child: Text(
                   muscle,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: AppColors.textPrimary,
-                    fontSize: 18.sp,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -272,36 +285,37 @@ class _MuscleCard extends StatelessWidget {
 }
 
 class _StartTimerButton extends StatelessWidget {
-  const _StartTimerButton({required this.onPressed, required this.colors});
+  const _StartTimerButton({required this.onPressed});
   final VoidCallback onPressed;
-  final List<Color> colors;
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return SizedBox(
       width: double.infinity,
-      height: 54,
+      height: 54.h,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6.r),
-          color: AppColors.primaryNeon,
+          borderRadius: BorderRadius.circular(10.r),
+          color: primaryColor,
           boxShadow: [
             BoxShadow(
-              color: AppColors.primaryNeon.withValues(alpha: 0.6),
-              blurRadius: 24,
+              color: primaryColor.withValues(alpha: 0.6),
+              blurRadius: 24.r,
             ),
           ],
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(6.r),
+            borderRadius: BorderRadius.circular(10.r),
             onTap: onPressed,
             child: Center(
               child: Text(
                 'START TIMER',
                 style: TextStyle(
-                  color: const Color(0xff000000),
+                  color: Colors.black,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 2,

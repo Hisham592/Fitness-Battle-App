@@ -1,65 +1,115 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:voz_app/features/workout/levels/level1.dart';
+
 bool challengeCompleted = false;
+
 class WorkoutProgressService {
-  static const _xpKey = "totalXP";
-  static const _streakKey = "streak";
-  static const _lastDateKey = "lastCompletedDate";
   static const _completedKey = "challengeCompletedToday";
 
   static Future<void> initialize() async {
-  final prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
 
-  final lastDate = prefs.getString(_lastDateKey);
-
-  if (lastDate != null) {
-    final last = DateTime.parse(lastDate);
-    final now = DateTime.now();
-
-    final difference = now.difference(last).inDays;
-
-    if (difference == 1) {
-      await prefs.setBool(_completedKey, false);
-    } else if (difference > 1) {
-      await prefs.setInt(_streakKey, 0);
-      await prefs.setBool(_completedKey, false);
+    final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    if (doc.exists) {
+      final data = doc.data() as Map<String, dynamic>;
+      final String lastDate = data['lastCompletedDate'] ?? '';
+      final String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      if (lastDate == today) {
+        challengeCompleted = true;
+        await prefs.setBool(_completedKey, true);
+        return;
+      }
     }
+    challengeCompleted = false;
+    await prefs.setBool(_completedKey, false);
   }
-
-  challengeCompleted = prefs.getBool(_completedKey) ?? false;
-}
 
   static Future<bool> canFinishToday() async {
+    return !challengeCompleted;
+  }
+
+  static Future<Map<String, int>> finishWorkout(int exerciseCount) async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    final int reward = exerciseCount * 10;
+
+    if (uid == null) {
+      return {'xpEarned': reward, 'streak': 1};
+    }
+
+    final userRef = FirebaseFirestore.instance.collection('users').doc(uid);
+    final docSnapshot = await userRef.get();
+    final data = docSnapshot.data() ?? {};
+
+    final int currentStreak = data['streak'] ?? 0;
+    final String lastCompletedDate = data['lastCompletedDate'] ?? '';
+
+    final now = DateTime.now();
+    final String todayStr = DateFormat('yyyy-MM-dd').format(now);
+
+    int newStreak = currentStreak;
+
+    if (lastCompletedDate.isEmpty) {
+      newStreak = 1;
+    } else if (lastCompletedDate == todayStr) {
+      newStreak = currentStreak > 0 ? currentStreak : 1;
+    } else {
+      final lastDate = DateTime.tryParse(lastCompletedDate);
+      if (lastDate == null) {
+        newStreak = 1;
+      } else {
+        bool skippedTrainingDay = false;
+        DateTime checkDate = DateTime(lastDate.year, lastDate.month, lastDate.day).add(const Duration(days: 1));
+        final todayDateOnly = DateTime(now.year, now.month, now.day);
+
+        while (checkDate.isBefore(todayDateOnly)) {
+          final dayName = DateFormat('EEEE').format(checkDate);
+          final exercisesForDay = beginnerExercises[dayName] ?? [];
+          if (exercisesForDay.isNotEmpty) {
+            skippedTrainingDay = true;
+            break;
+          }
+          checkDate = checkDate.add(const Duration(days: 1));
+        }
+
+        if (skippedTrainingDay) {
+          newStreak = 1;
+        } else {
+          newStreak = currentStreak + 1;
+        }
+      }
+    }
+
+    await userRef.update({
+      'xp': FieldValue.increment(reward),
+      'points': FieldValue.increment(reward),
+      'completedDays': FieldValue.arrayUnion([todayStr]),
+      'lastCompletedDate': todayStr,
+      'streak': newStreak,
+    });
+
     final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_completedKey, true);
+    challengeCompleted = true;
 
-    return !(prefs.getBool(_completedKey) ?? false);
+    return {'xpEarned': reward, 'streak': newStreak};
   }
 
-  static Future<void> finishWorkout() async {
-  final prefs = await SharedPreferences.getInstance();
-
-  if (prefs.getBool(_completedKey) ?? false) {
-    return;
-  }
-
-  final xp = prefs.getInt(_xpKey) ?? 0;
-  final streak = prefs.getInt(_streakKey) ?? 0;
-
-  await prefs.setInt(_xpKey, xp + 50);
-  await prefs.setInt(_streakKey, streak + 1);
-  await prefs.setBool(_completedKey, true);
-  await prefs.setString(
-    _lastDateKey,
-    DateFormat('yyyy-MM-dd').format(DateTime.now()),
-  );
-}
   static Future<int> getXP() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_xpKey) ?? 0;
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return 0;
+    final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    return (doc.data()?['xp'] as num?)?.toInt() ?? 0;
   }
 
   static Future<int> getStreak() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_streakKey) ?? 0;
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return 0;
+    final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    return (doc.data()?['streak'] as num?)?.toInt() ?? 0;
   }
 }

@@ -5,15 +5,14 @@ import 'package:voz_app/core/theme/app_colors.dart';
 import 'package:voz_app/features/nutrition/domain/entities/meal.dart';
 import 'package:voz_app/features/nutrition/presentation/widgets/macro_info_card.dart';
 
-
 class MealDetailsScreen extends StatelessWidget {
   final Meal meal;
   const MealDetailsScreen({super.key, required this.meal});
 
   @override
   Widget build(BuildContext context) {
-    final Color dynamicDishColor =
-        meal.containerColor;
+    final Color dynamicDishColor = meal.containerColor;
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -124,11 +123,13 @@ class MealDetailsScreen extends StatelessWidget {
                                 label: 'Price',
                                 value: meal.priceEgp.toStringAsFixed(0),
                                 unit: 'EGP',
-                                highlightColor: const Color(0xffDF00FF),
-                                backgroundColor: const Color(0xffDF00FF)
-                                    .withValues(alpha: 0.09),
-                                borderColor: const Color(0xffDF00FF)
-                                    .withValues(alpha: 0.4),
+                                highlightColor: primaryColor,
+                                backgroundColor: primaryColor.withValues(
+                                  alpha: 0.09,
+                                ),
+                                borderColor: primaryColor.withValues(
+                                  alpha: 0.4,
+                                ),
                               ),
                               MacroInfoCard(
                                 label: 'Protein',
@@ -158,7 +159,7 @@ class MealDetailsScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFFDF00FF),
+                              color: primaryColor,
                               letterSpacing: 1.68,
                             ),
                           ),

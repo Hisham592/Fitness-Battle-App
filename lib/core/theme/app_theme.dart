@@ -4,17 +4,20 @@ import 'app_colors.dart';
 class AppTheme {
   AppTheme._();
 
-  static ThemeData get dark {
+  static ThemeData getTheme(Color selectedNeonColor) {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      fontFamily: 'VOZFont',
       scaffoldBackgroundColor: AppColors.background,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.accent,
+        seedColor: selectedNeonColor,
         brightness: Brightness.dark,
         surface: AppColors.surface,
+        primary: selectedNeonColor,
       ),
       appBarTheme: const AppBarTheme(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: AppColors.background,
         elevation: 0,
         centerTitle: true,
@@ -30,7 +33,7 @@ class AppTheme {
         thumbColor: WidgetStateProperty.all(Colors.white),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return AppColors.accent;
+            return selectedNeonColor;
           }
           return const Color(0xFF3A3A3E);
         }),

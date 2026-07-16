@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../../../core/theme/app_colors.dart';
 
-/// One of the 4 stat cards on the Profile screen (Streak / XP / Workouts / Level).
 class StatBadgeCard extends StatelessWidget {
   final String emoji;
   final String value;
@@ -17,6 +15,8 @@ class StatBadgeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 18),
       decoration: BoxDecoration(
@@ -40,8 +40,8 @@ class StatBadgeCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             label.toUpperCase(),
-            style: const TextStyle(
-              color: AppColors.accent,
+            style: TextStyle(
+              color: primaryColor,
               fontSize: 11,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,

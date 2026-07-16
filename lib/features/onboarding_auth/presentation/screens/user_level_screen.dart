@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:voz_app/core/theme/app_colors.dart';
 import 'package:voz_app/core/widgets/custom_snackbar.dart';
-import 'package:voz_app/features/dashboard/main_layout_screen.dart';
+import 'package:voz_app/main_layout_screen.dart';
 import 'package:voz_app/features/onboarding_auth/data/models/levels_model.dart';
 import 'package:voz_app/features/onboarding_auth/logic/auth_cubit/auth_cubit.dart';
 import 'package:voz_app/features/onboarding_auth/logic/auth_cubit/auth_state.dart';

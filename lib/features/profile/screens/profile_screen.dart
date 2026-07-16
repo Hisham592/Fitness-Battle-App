@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:voz_app/core/theme/app_colors.dart';
 import 'package:voz_app/core/widgets/appbar_title_widget.dart';
+import 'package:voz_app/core/widgets/custom_neon_button.dart';
+import 'package:voz_app/features/dashboard/journey_screen.dart';
 import 'package:voz_app/features/onboarding_auth/data/models/user_model.dart';
 import 'package:voz_app/features/profile/controllers/profile_controller.dart';
 import 'package:voz_app/features/profile/widgets/stat_badge_card.dart';
@@ -23,15 +26,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser;
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     return AnimatedBuilder(
       animation: widget.controller,
       builder: (context, _) {
-        final avatar = widget.controller.activeAvatar;
-
         return Scaffold(
           appBar: AppBar(
-            title: AppBarTitleWidget(title: "PROFILE"),
+            title: const AppBarTitleWidget(title: "PROFILE"),
             centerTitle: true,
             actions: [
               IconButton(
@@ -46,24 +48,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ],
             bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(1),
+              preferredSize: Size.fromHeight(1.h),
               child: Container(
-                height: 1,
+                height: 1.h,
                 color: Colors.grey.withValues(alpha: 0.3),
               ),
             ),
           ),
           body: SafeArea(
-            child: FutureBuilder<DocumentSnapshot>(
-              future: FirebaseFirestore.instance
+            child: StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
                   .collection('users')
                   .doc(currentUser?.uid)
-                  .get(),
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
+                  return Center(
                     child: CircularProgressIndicator(
-                      color: AppColors.primaryNeon,
+                      color: primaryColor,
                     ),
                   );
                 }
@@ -71,10 +73,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 if (snapshot.hasError ||
                     !snapshot.hasData ||
                     !snapshot.data!.exists) {
-                  return const Center(
+                  return Center(
                     child: Text(
                       'Error fetching profile data',
-                      style: TextStyle(color: Colors.red),
+                      style: TextStyle(color: Colors.red, fontSize: 14.sp),
                     ),
                   );
                 }
@@ -84,9 +86,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 );
 
                 return SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 16,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24.w,
+                    vertical: 16.h,
                   ),
                   child: Column(
                     children: [
@@ -94,88 +96,88 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         alignment: Alignment.center,
                         children: [
                           Container(
-                            width: 140,
-                            height: 140,
+                            width: 140.w,
+                            height: 140.h,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: AppColors.accent.withValues(alpha: (0.12)),
+                              color: primaryColor.withValues(alpha: 0.12),
                               border: Border.all(
-                                color: AppColors.accent,
-                                width: 2,
+                                color: primaryColor,
+                                width: 2.w,
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.accent.withValues(
-                                    alpha: (0.55),
+                                  color: primaryColor.withValues(
+                                    alpha: 0.55,
                                   ),
-                                  blurRadius: 28,
-                                  spreadRadius: 2,
+                                  blurRadius: 28.r,
+                                  spreadRadius: 2.r,
                                 ),
                               ],
                             ),
                             child: Text(
-                              avatar.emoji,
-                              style: const TextStyle(fontSize: 56),
+                              firebaseUser.activeAvatar,
+                              style: TextStyle(fontSize: 56.sp),
                             ),
                           ),
                           Positioned(
-                            bottom: 4,
-                            right: 4,
+                            bottom: 4.h,
+                            right: 4.w,
                             child: Container(
-                              width: 32,
-                              height: 32,
+                              width: 32.w,
+                              height: 32.h,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: AppColors.accent,
+                                color: primaryColor,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.accent.withValues(
-                                      alpha: (0.6),
+                                    color: primaryColor.withValues(
+                                      alpha: 0.6,
                                     ),
-                                    blurRadius: 10,
+                                    blurRadius: 10.r,
                                   ),
                                 ],
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.bolt,
                                 color: Colors.black,
-                                size: 18,
+                                size: 18.sp,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                       Text(
                         firebaseUser.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textPrimary,
-                          fontSize: 26,
+                          fontSize: 26.sp,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: 6.h),
                       Text(
-                        'Level: ${firebaseUser.level} · Member since ${firebaseUser.createdAt.length >= 10 ? firebaseUser.createdAt.substring(0, 4) : ""}',
-                        style: const TextStyle(
+                        'Member since ${firebaseUser.createdAt.length >= 10 ? firebaseUser.createdAt.substring(0, 4) : ""}',
+                        style: TextStyle(
                           color: AppColors.textSecondary,
-                          fontSize: 13,
+                          fontSize: 13.sp,
                         ),
                       ),
-                      const SizedBox(height: 28),
+                      SizedBox(height: 28.h),
                       GridView.count(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         crossAxisCount: 2,
-                        mainAxisSpacing: 14,
-                        crossAxisSpacing: 14,
+                        mainAxisSpacing: 14.h,
+                        crossAxisSpacing: 14.w,
                         childAspectRatio: 1.3,
                         children: [
-                          const StatBadgeCard(
+                          StatBadgeCard(
                             emoji: '🔥',
-                            value: '12 Days',
+                            value: '${firebaseUser.streak} days',
                             label: 'Streak',
                           ),
                           StatBadgeCard(
@@ -184,35 +186,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             label: 'Total XP',
                           ),
                           StatBadgeCard(
-                            emoji: '💪',
+                            emoji: '🎫',
                             value: '${firebaseUser.points} PTS',
                             label: 'Points',
                           ),
                           StatBadgeCard(
-                            emoji: '🏆',
+                            emoji: '🎖️',
                             value: firebaseUser.level.toUpperCase(),
                             label: 'Level',
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
                       Container(
                         decoration: BoxDecoration(
                           color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(16.r),
                           border: Border.all(color: AppColors.surfaceBorder),
                         ),
                         child: ListTile(
-                          leading: const Icon(
+                          leading: Icon(
                             Icons.emoji_events_outlined,
-                            color: AppColors.accent,
+                            color: primaryColor,
                           ),
-                          title: const Text(
+                          title: Text(
                             'MY JOURNEY & LEVELS',
                             style: TextStyle(
                               color: AppColors.textPrimary,
                               fontWeight: FontWeight.w700,
-                              fontSize: 13,
+                              fontSize: 13.sp,
                               letterSpacing: 0.5,
                             ),
                           ),
@@ -220,40 +222,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Icons.chevron_right,
                             color: AppColors.textSecondary,
                           ),
-                          onTap: () {},
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 54,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.accent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            elevation: 0,
-                          ),
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => AvatarStoreScreen(
-                                controller: widget.controller,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const JourneyScreen(),
                               ),
-                            ),
-                          ),
-                          child: const Text(
-                            'ENTER AVATAR STORE →',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.5,
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 24.h),
+                      CustomNeonButton(
+                        text: 'ENTER AVATAR STORE',
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AvatarStoreScreen(
+                              controller: widget.controller,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                     ],
                   ),
                 );

@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-
 import '../../../core/theme/app_colors.dart';
 import '../models/avatar_model.dart';
 
-/// A single tile in the Avatar Store grid.
-///
-/// - Locked avatars are dimmed with a lock icon + PTS cost.
-/// - Unlocked avatars show an "OWNED" pill.
-/// - The currently active/equipped avatar gets the neon glow border.
 class AvatarTile extends StatelessWidget {
   final AvatarModel avatar;
   final bool isActive;
@@ -23,6 +17,7 @@ class AvatarTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final highlighted = isActive;
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     return GestureDetector(
       onTap: onTap,
@@ -32,20 +27,20 @@ class AvatarTile extends StatelessWidget {
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: highlighted ? AppColors.accent : AppColors.surfaceBorder,
+            color: highlighted ? primaryColor : AppColors.surfaceBorder,
             width: highlighted ? 1.5 : 1,
           ),
           boxShadow: highlighted
               ? [
                   BoxShadow(
-                    color: AppColors.accent.withOpacity(0.45),
+                    color: primaryColor.withValues(alpha: 0.45),
                     blurRadius: 20,
                     spreadRadius: 1,
                   ),
                 ]
               : null,
         ),
-        padding: const EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -58,7 +53,7 @@ class AvatarTile extends StatelessWidget {
               avatar.name,
               style: TextStyle(
                 color: avatar.unlocked
-                    ? (highlighted ? AppColors.accent : AppColors.textPrimary)
+                    ? (highlighted ? primaryColor : AppColors.textPrimary)
                     : AppColors.lockedGrey,
                 fontWeight: FontWeight.w700,
                 fontSize: 13,
@@ -66,19 +61,35 @@ class AvatarTile extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            if (avatar.unlocked)
+            if (isActive)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.accent,
+                  color: primaryColor,
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Text(
-                  'OWNED',
+                  'EQUIPPED',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 11,
                     fontWeight: FontWeight.w800,
+                  ),
+                ),
+              )
+            else if (avatar.unlocked)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceBorder,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: const Text(
+                  'EQUIP',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               )

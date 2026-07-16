@@ -102,6 +102,7 @@ class _SmartNutritionScreenState extends State<SmartNutritionScreen> {
   @override
   Widget build(BuildContext context) {
     final displayMeals = _getSortedMeals();
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
       appBar: AppBar(
@@ -173,9 +174,9 @@ class _SmartNutritionScreenState extends State<SmartNutritionScreen> {
                               SizedBox(height: 16.h),
 
                               ListTile(
-                                leading: const Icon(
+                                leading: Icon(
                                   Icons.restart_alt,
-                                  color: Color(0xffDF00FF),
+                                  color: primaryColor,
                                 ),
                                 title: Text(
                                   'Default Order',
@@ -194,9 +195,9 @@ class _SmartNutritionScreenState extends State<SmartNutritionScreen> {
                               const Divider(color: Color(0xff2E2E2E)),
 
                               ListTile(
-                                leading: const Icon(
+                                leading: Icon(
                                   Icons.local_fire_department,
-                                  color: Color(0xffDF00FF),
+                                  color: primaryColor,
                                 ),
                                 title: Text(
                                   'Calories',
@@ -215,9 +216,9 @@ class _SmartNutritionScreenState extends State<SmartNutritionScreen> {
                               const Divider(color: Color(0xff2E2E2E)),
 
                               ListTile(
-                                leading: const Icon(
+                                leading: Icon(
                                   Icons.payments,
-                                  color: Color(0xffDF00FF),
+                                  color: primaryColor,
                                 ),
                                 title: Text(
                                   'Price',
@@ -242,10 +243,10 @@ class _SmartNutritionScreenState extends State<SmartNutritionScreen> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xffDF00FF).withValues(alpha: 0.1),
+                      color: primaryColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4.r),
                       border: Border.all(
-                        color: const Color(0xffDF00FF).withValues(alpha: 0.22),
+                        color: primaryColor.withValues(alpha: 0.22),
                         width: 1.w,
                       ),
                     ),
@@ -260,7 +261,7 @@ class _SmartNutritionScreenState extends State<SmartNutritionScreen> {
                             : 'BY ${_selectedFilter.toUpperCase()}',
                         style: TextStyle(
                           fontSize: 11.sp,
-                          color: const Color(0xffDF00FF),
+                          color: primaryColor,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -295,4 +296,3 @@ class _SmartNutritionScreenState extends State<SmartNutritionScreen> {
     );
   }
 }
-

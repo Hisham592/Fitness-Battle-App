@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:voz_app/core/theme/app_colors.dart';
 
 class CustomNeonButton extends StatelessWidget {
   final String text;
@@ -15,6 +14,7 @@ class CustomNeonButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isEnabled = onPressed != null;
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -25,7 +25,7 @@ class CustomNeonButton extends StatelessWidget {
         boxShadow: isEnabled
             ? [
                 BoxShadow(
-                  color: AppColors.primaryNeon.withValues(alpha: 0.4),
+                  color: primaryColor.withValues(alpha: 0.4),
                   blurRadius: 15.r,
                   spreadRadius: 1.r,
                   offset: const Offset(0, 4),
@@ -36,7 +36,7 @@ class CustomNeonButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryNeon,
+          backgroundColor: primaryColor,
           disabledBackgroundColor: const Color(0XFF1E1E1E),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.r),

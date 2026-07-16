@@ -1,99 +1,149 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:voz_app/core/theme/app_colors.dart';
+import 'package:voz_app/core/widgets/appbar_title_widget.dart';
+import 'package:voz_app/features/onboarding_auth/data/models/user_model.dart';
 
 class JourneyScreen extends StatelessWidget {
   const JourneyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            _JourneyTopBar(),
-            const Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(20, 28, 20, 20),
-                child: Column(
-                  children: [
-                    _LevelTimelineItem(
-                      index: '1',
-                      isLocked: false,
-                      isLast: false,
-                      title: 'LEVEL 1 — BEGINNER',
-                      statusText: 'ACTIVE — Current Day: 11',
-                      xpLabel: 'XP Progress',
-                      xpValue: '320 / 500 XP',
-                      progress: 0.64,
-                      lockNote: null,
-                    ),
-                    _LevelTimelineItem(
-                      index: '2',
-                      isLocked: true,
-                      isLast: false,
-                      title: 'LEVEL 2 — INTERMEDIATE',
-                      statusText: 'Required XP',
-                      xpLabel: null,
-                      xpValue: '320 / 500',
-                      progress: 0.64,
-                      lockNote: 'Requires 500 XP to unlock',
-                    ),
-                    _LevelTimelineItem(
-                      index: '3',
-                      isLocked: true,
-                      isLast: true,
-                      title: 'LEVEL 3 — ADVANCED',
-                      statusText: null,
-                      xpLabel: null,
-                      xpValue: null,
-                      progress: null,
-                      lockNote: 'Requires 1,200 XP to unlock',
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+      appBar: AppBar(
+        title: const AppBarTitleWidget(title: "MY JOURNEY"),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            size: 18,
+            color: AppColors.white,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(
+            height: 1,
+            color: Colors.grey.withValues(alpha: 0.3),
+          ),
         ),
       ),
-    );
-  }
-}
+      body: SafeArea(
+        child: StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('users')
+              .doc(user?.uid)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(color: primaryColor),
+              );
+            }
 
-class _JourneyTopBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-        border: Border(bottom: BorderSide(color: AppColors.border, width: 1)),
-      ),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 28,
-            height: 32,
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: const Icon(Icons.arrow_back_ios_new,
-                  size: 18, color: AppColors.white),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ),
-          const SizedBox(width: 8),
-          const Text(
-            'MY JOURNEY',
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 13,
-              letterSpacing: 2.08,
-              color: AppColors.white,
-            ),
-          ),
-        ],
+            if (snapshot.hasError ||
+                !snapshot.hasData ||
+                !snapshot.data!.exists) {
+              return const Center(
+                child: Text(
+                  'Error loading journey data',
+                  style: TextStyle(color: AppColors.white),
+                ),
+              );
+            }
+
+            final firebaseUser = UserModel.fromMap(
+              snapshot.data!.data() as Map<String, dynamic>,
+            );
+            final int userXP = firebaseUser.xp;
+
+            final bool level1IsLocked = false;
+            final String level1Status = userXP < 1500
+                ? 'ACTIVE — Leveling up'
+                : 'COMPLETED';
+            final String level1XpValue = userXP < 1500
+                ? '$userXP / 1500 XP'
+                : '1500 / 1500 XP';
+            final double level1Progress = userXP < 1500 ? (userXP / 1500) : 1.0;
+
+            final bool level2IsLocked = userXP < 1500;
+            final String level2Status = level2IsLocked
+                ? 'Required XP'
+                : (userXP < 5000 ? 'ACTIVE — Leveling up' : 'COMPLETED');
+            final String? level2XpLabel = level2IsLocked ? null : 'XP Progress';
+            final String level2XpValue = level2IsLocked
+                ? '0 / 3500 XP'
+                : (userXP < 5000
+                      ? '${userXP - 1500} / 3500 XP'
+                      : '3500 / 3500 XP');
+            final double level2Progress = level2IsLocked
+                ? 0.0
+                : (userXP < 5000 ? ((userXP - 1500) / 3500) : 1.0);
+            final String? level2LockNote = level2IsLocked
+                ? 'Requires 1,500 total XP to unlock'
+                : null;
+
+            final bool level3IsLocked = userXP < 5000;
+            final String level3Status = level3IsLocked
+                ? 'Required XP'
+                : 'ACTIVE — Ultimate Tier';
+            final String? level3XpLabel = level3IsLocked ? null : 'XP Progress';
+            final String level3XpValue = level3IsLocked
+                ? 'Requires 5000 total XP'
+                : '$userXP XP';
+            final double level3Progress = level3IsLocked ? 0.0 : 1.0;
+            final String? level3LockNote = level3IsLocked
+                ? 'Requires 5,000 total XP to unlock'
+                : null;
+
+            return SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 28, 20, 20),
+              child: Column(
+                children: [
+                  _LevelTimelineItem(
+                    index: '1',
+                    isLocked: level1IsLocked,
+                    isLast: false,
+                    title: 'LEVEL 1 — BEGINNER',
+                    statusText: level1Status,
+                    xpLabel: 'XP Progress',
+                    xpValue: level1XpValue,
+                    progress: level1Progress,
+                    lockNote: null,
+                  ),
+                  _LevelTimelineItem(
+                    index: '2',
+                    isLocked: level2IsLocked,
+                    isLast: false,
+                    title: 'LEVEL 2 — INTERMEDIATE',
+                    statusText: level2Status,
+                    xpLabel: level2XpLabel,
+                    xpValue: level2XpValue,
+                    progress: level2Progress,
+                    lockNote: level2LockNote,
+                  ),
+                  _LevelTimelineItem(
+                    index: '3',
+                    isLocked: level3IsLocked,
+                    isLast: true,
+                    title: 'LEVEL 3 — ADVANCED',
+                    statusText: level3Status,
+                    xpLabel: level3XpLabel,
+                    xpValue: level3XpValue,
+                    progress: level3Progress,
+                    lockNote: level3LockNote,
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -124,6 +174,8 @@ class _LevelTimelineItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,13 +191,10 @@ class _LevelTimelineItem extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: isLocked
                           ? null
-                          : const LinearGradient(
+                          : LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: [
-                                AppColors.pink,
-                                AppColors.grayDot,
-                              ],
+                              colors: [primaryColor, AppColors.grayDot],
                             ),
                       color: isLocked ? AppColors.grayDot : null,
                     ),
@@ -182,29 +231,34 @@ class _Node extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return Container(
       width: 52,
       height: 52,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isLocked ? AppColors.lockedNode : AppColors.pink,
+        color: isLocked ? AppColors.lockedNode : primaryColor,
         boxShadow: isLocked
             ? null
             : [
                 BoxShadow(
-                  color: AppColors.pink.withValues(alpha: 0.6),
+                  color: primaryColor.withValues(alpha: 0.6),
                   blurRadius: 24,
                 ),
                 BoxShadow(
-                  color: AppColors.pink.withValues(alpha: 0.25),
+                  color: primaryColor.withValues(alpha: 0.25),
                   blurRadius: 48,
                 ),
               ],
       ),
       child: isLocked
-          ? const Icon(Icons.lock_outline,
-              size: 18, color: AppColors.lockedIcon)
+          ? const Icon(
+              Icons.lock_outline,
+              size: 18,
+              color: AppColors.lockedIcon,
+            )
           : Text(
               index,
               style: const TextStyle(
@@ -238,18 +292,20 @@ class _LevelCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isLocked
             ? const Color(0xFF161616)
-            : AppColors.pink.withValues(alpha: 0.07),
+            : primaryColor.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(16),
         border: Border(
           top: BorderSide(
             color: isLocked
                 ? AppColors.border
-                : AppColors.pink.withValues(alpha: 0.38),
+                : primaryColor.withValues(alpha: 0.38),
             width: 1,
           ),
         ),
@@ -262,7 +318,7 @@ class _LevelCard extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 17,
-              color: isLocked ? const Color(0xFF555555) : AppColors.pink,
+              color: isLocked ? const Color(0xFF555555) : primaryColor,
             ),
           ),
           const SizedBox(height: 8),
@@ -280,10 +336,7 @@ class _LevelCard extends StatelessWidget {
                 const SizedBox(width: 6),
                 Text(
                   statusText!,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.green,
-                  ),
+                  style: const TextStyle(fontSize: 12, color: AppColors.green),
                 ),
               ],
             ),
@@ -292,10 +345,7 @@ class _LevelCard extends StatelessWidget {
           if (isLocked && statusText != null) ...[
             Text(
               statusText!,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Color(0xFF555555),
-              ),
+              style: const TextStyle(fontSize: 12, color: Color(0xFF555555)),
             ),
             const SizedBox(height: 6),
           ],
@@ -306,9 +356,9 @@ class _LevelCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (xpLabel != null)
-                     Text(
+                    Text(
                       xpLabel!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 11,
                         color: AppColors.grayLabel,
                       ),
@@ -321,7 +371,7 @@ class _LevelCard extends StatelessWidget {
                         fontSize: 12,
                         color: isLocked
                             ? const Color(0xFF555555)
-                            : AppColors.pink,
+                            : primaryColor,
                       ),
                     ),
                 ],
@@ -338,13 +388,14 @@ class _LevelCard extends StatelessWidget {
                   widthFactor: progress!.clamp(0, 1),
                   child: Container(
                     decoration: BoxDecoration(
-                      color:
-                          isLocked ? const Color(0xFF3A3A3A) : AppColors.pink,
+                      color: isLocked
+                          ? const Color(0xFF3A3A3A)
+                          : primaryColor,
                       boxShadow: isLocked
                           ? null
                           : [
-                              const BoxShadow(
-                                color: AppColors.pink,
+                              BoxShadow(
+                                color: primaryColor,
                                 blurRadius: 6,
                               ),
                             ],
@@ -357,8 +408,11 @@ class _LevelCard extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                const Icon(Icons.lock_outline,
-                    size: 11, color: Color(0xFF555555)),
+                const Icon(
+                  Icons.lock_outline,
+                  size: 11,
+                  color: Color(0xFF555555),
+                ),
                 const SizedBox(width: 6),
                 Text(
                   lockNote!,

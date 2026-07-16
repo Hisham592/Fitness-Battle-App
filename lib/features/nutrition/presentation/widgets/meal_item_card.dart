@@ -17,14 +17,16 @@ class MealItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.only(right: 16.w),
         decoration: BoxDecoration(
-          color: Color(0xFF1C1C1C),
+          color: const Color(0xFF1C1C1C),
           borderRadius: BorderRadius.circular(14.r),
-          border: Border.all(color: Color(0xff2E2E2E), width: 1.w),
+          border: Border.all(color: const Color(0xff2E2E2E), width: 1.w),
         ),
         child: Row(
           children: [
@@ -75,11 +77,11 @@ class MealItemCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
               decoration: BoxDecoration(
-                color: AppColors.primaryNeon,
+                color: primaryColor,
                 borderRadius: BorderRadius.circular(4.r),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primaryNeon.withOpacity(0.40),
+                    color: primaryColor.withValues(alpha: 0.40),
                     offset: const Offset(0, 0),
                     blurRadius: 8,
                     spreadRadius: 0,

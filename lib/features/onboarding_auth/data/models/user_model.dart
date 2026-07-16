@@ -6,6 +6,11 @@ class UserModel {
   final int xp;
   final int points;
   final String createdAt;
+  final int streak;
+  final String lastCompletedDate;
+  final List<String> completedDays;
+  final String activeAvatar;
+  final List<String> unlockedAvatars;
 
   UserModel({
     required this.uid,
@@ -15,6 +20,11 @@ class UserModel {
     int? xp,
     this.points = 0,
     String? createdAt,
+    this.streak = 0,
+    this.lastCompletedDate = "",
+    this.completedDays = const [],
+    this.activeAvatar = "🦁",
+    this.unlockedAvatars = const ["🦁", "lion"],
   }) : xp = xp ?? _calculateInitialXp(level),
        createdAt = createdAt ?? DateTime.now().toIso8601String();
 
@@ -39,6 +49,11 @@ class UserModel {
       'xp': xp,
       'points': points,
       'createdAt': createdAt,
+      'streak': streak,
+      'lastCompletedDate': lastCompletedDate,
+      'completedDays': completedDays,
+      'activeAvatar': activeAvatar,
+      'unlockedAvatars': unlockedAvatars,
     };
   }
 
@@ -51,6 +66,15 @@ class UserModel {
       xp: map['xp'] ?? 0,
       points: map['points'] ?? 0,
       createdAt: map['createdAt'] ?? '',
+      streak: map['streak'] ?? 0,
+      lastCompletedDate: map['lastCompletedDate'] ?? '',
+      completedDays: map['completedDays'] != null
+          ? List<String>.from(map['completedDays'])
+          : [],
+      activeAvatar: map['activeAvatar'] ?? '🦁',
+      unlockedAvatars: map['unlockedAvatars'] != null
+          ? List<String>.from(map['unlockedAvatars'])
+          : ['🦁', 'lion'],
     );
   }
 }

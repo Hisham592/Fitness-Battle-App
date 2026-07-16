@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:voz_app/core/theme/app_colors.dart';
+import 'package:voz_app/main_layout_screen.dart';
 
-/// VOZ Fitness App — "Challenge Complete" screen
-///
-/// Drop this widget in as a route, e.g.:
-/// Navigator.push(context, MaterialPageRoute(builder: (_) => const ChallengeCompleteScreen()));
 class AchiveScreen extends StatelessWidget {
   const AchiveScreen({
     super.key,
@@ -20,8 +17,6 @@ class AchiveScreen extends StatelessWidget {
   final int streakDays;
   final VoidCallback? onReturn;
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,17 +24,21 @@ class AchiveScreen extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            // Scattered confetti dots across the top of the screen
-            const Positioned.fill(
-              child: _ConfettiField(dotCount: 50),
-            ),
+            const Positioned.fill(child: _ConfettiField(dotCount: 50)),
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 28),
                 child: _CompleteCard(
                   xpEarned: xpEarned,
                   streakDays: streakDays,
-                  onReturn: onReturn ?? () => Navigator.of(context).maybePop(),
+                  onReturn:
+                      onReturn ??
+                      () => Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => const MainLayoutScreen(),
+                        ),
+                        (route) => false,
+                      ),
                 ),
               ),
             ),
@@ -61,19 +60,19 @@ class _CompleteCard extends StatelessWidget {
   final int streakDays;
   final VoidCallback onReturn;
 
-
-
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 36, 24, 24),
       decoration: BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.primaryNeon,width: 1.w),
+        border: Border.all(color: primaryColor, width: 1.w),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primaryNeon.withValues(alpha:0.45),
+            color: primaryColor.withValues(alpha: 0.45),
             blurRadius: 18,
             spreadRadius: 1.5,
           ),
@@ -82,31 +81,29 @@ class _CompleteCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _GlowingCheck(color: AppColors.primaryNeon),
-           SizedBox(height: 20),
+          _GlowingCheck(color: primaryColor),
+          const SizedBox(height: 20),
           Text(
             'CHALLENGE COMPLETE',
             style: TextStyle(
-              color: AppColors.primaryNeon,
+              color: primaryColor,
               fontSize: 11.sp,
               fontWeight: FontWeight.w600,
               letterSpacing: 2.42,
               fontFamily: 'Rajdhani',
-              
             ),
           ),
           const SizedBox(height: 7),
           Text(
             '+$xpEarned XP COLLECTED!\nSTREAK MAINTAINED!',
             textAlign: TextAlign.center,
-            style:  TextStyle(
+            style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 27.sp,
               fontWeight: FontWeight.w700,
               fontFamily: 'Rajdhani',
             ),
           ),
-        
           Text(
             "You're on day $streakDays. Keep the momentum going —\ntomorrow awaits.",
             textAlign: TextAlign.center,
@@ -120,7 +117,10 @@ class _CompleteCard extends StatelessWidget {
           const SizedBox(height: 20),
           _StreakPill(streakDays: streakDays),
           const SizedBox(height: 22),
-          _ReturnButton(onPressed: onReturn, colors: const [ Color(0xFF37241E), AppColors.primaryNeon]),
+          _ReturnButton(
+            onPressed: onReturn,
+            color: primaryColor,
+          ),
         ],
       ),
     );
@@ -138,10 +138,14 @@ class _GlowingCheck extends StatelessWidget {
       height: 76.h,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppColors.timerback.withValues(alpha:0.12),
-        border: Border.all(color: AppColors.primaryNeon, width: 2),
+        color: AppColors.timerback.withValues(alpha: 0.12),
+        border: Border.all(color: color, width: 2),
         boxShadow: [
-          BoxShadow(color: AppColors.primaryNeon.withValues(alpha:0.60), blurRadius: 48, spreadRadius: 2),
+          BoxShadow(
+            color: color.withValues(alpha: 0.60),
+            blurRadius: 48,
+            spreadRadius: 2,
+          ),
         ],
       ),
       child: Center(
@@ -166,13 +170,13 @@ class _StreakPill extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF37241E),
         borderRadius: BorderRadius.circular(33),
-        border: Border.all(color: Color(0XFF673523),width: 1.w),
+        border: Border.all(color: const Color(0XFF673523), width: 1.w),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-       spacing: 10.w,
+        spacing: 10.w,
         children: [
-         SvgPicture.asset(
+          SvgPicture.asset(
             'assets/icons/heat icon.svg',
             width: 7.w,
             height: 10.h,
@@ -186,7 +190,6 @@ class _StreakPill extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-           
         ],
       ),
     );
@@ -194,9 +197,9 @@ class _StreakPill extends StatelessWidget {
 }
 
 class _ReturnButton extends StatelessWidget {
-  const _ReturnButton({required this.onPressed, required this.colors});
+  const _ReturnButton({required this.onPressed, required this.color});
   final VoidCallback onPressed;
-  final List<Color> colors;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -204,40 +207,37 @@ class _ReturnButton extends StatelessWidget {
       width: double.infinity,
       height: 52.h,
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        color: color,
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.6),
+            blurRadius: 24,
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
           borderRadius: BorderRadius.circular(6),
-          color: AppColors.primaryNeon,
-          
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primaryNeon.withValues(alpha:0.6),
-              blurRadius: 24,
-            ),
-          ],
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(6),
-            onTap: onPressed,
-            child: const Center(
-              child: Text(
-                'RETURN TO DASHBOARD ',
-                style: TextStyle(
-                  color: Color(0xff000000),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.8,
-                ),
+          onTap: onPressed,
+          child: const Center(
+            child: Text(
+              'RETURN TO DASHBOARD ',
+              style: TextStyle(
+                color: Color(0xff000000),
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.8,
               ),
             ),
           ),
         ),
-      
+      ),
     );
   }
 }
 
-/// Scattered confetti dots in the upper portion of the screen.
 class _ConfettiField extends StatelessWidget {
   const _ConfettiField({required this.dotCount});
   final int dotCount;
@@ -252,7 +252,7 @@ class _ConfettiField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rnd = Random(7); // fixed seed so layout is stable across rebuilds
+    final rnd = Random(7);
     return LayoutBuilder(
       builder: (context, constraints) {
         final w = constraints.maxWidth;
