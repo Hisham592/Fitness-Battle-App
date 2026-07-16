@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:voz_app/core/theme/app_colors.dart';
+import 'package:voz_app/features/profile/controllers/profile_controller.dart';
+import 'package:voz_app/features/profile/widgets/stat_badge_card.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../controllers/profile_controller.dart';
-import '../widgets/bottom_nav_bar.dart';
-import '../widgets/stat_badge_card.dart';
 import 'avatar_store_screen.dart';
 import 'settings_screen.dart';
 
@@ -17,8 +16,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _navIndex = 3; // Profile tab active
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -36,7 +33,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => SettingsScreen(controller: widget.controller),
+                    builder: (_) =>
+                        SettingsScreen(controller: widget.controller),
                   ),
                 ),
               ),
@@ -47,7 +45,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Column(
                 children: [
-                  // Circular avatar badge with neon glow + lightning indicator.
                   Stack(
                     alignment: Alignment.center,
                     children: [
@@ -57,17 +54,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: AppColors.accent.withOpacity(0.12),
+                          color: AppColors.accent.withValues(alpha: (0.12)),
                           border: Border.all(color: AppColors.accent, width: 2),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.accent.withOpacity(0.55),
+                              color: AppColors.accent.withValues(alpha: (0.55)),
                               blurRadius: 28,
                               spreadRadius: 2,
                             ),
                           ],
                         ),
-                        child: Text(avatar.emoji, style: const TextStyle(fontSize: 56)),
+                        child: Text(
+                          avatar.emoji,
+                          style: const TextStyle(fontSize: 56),
+                        ),
                       ),
                       Positioned(
                         bottom: 4,
@@ -80,10 +80,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             shape: BoxShape.circle,
                             color: AppColors.accent,
                             boxShadow: [
-                              BoxShadow(color: AppColors.accent.withOpacity(0.6), blurRadius: 10),
+                              BoxShadow(
+                                color: AppColors.accent.withValues(
+                                  alpha: (0.6),
+                                ),
+                                blurRadius: 10,
+                              ),
                             ],
                           ),
-                          child: const Icon(Icons.bolt, color: Colors.black, size: 18),
+                          child: const Icon(
+                            Icons.bolt,
+                            color: Colors.black,
+                            size: 18,
+                          ),
                         ),
                       ),
                     ],
@@ -100,7 +109,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 6),
                   Text(
                     '${profile.levelLabel} · Member since ${profile.memberSinceYear}',
-                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 13,
+                    ),
                   ),
                   const SizedBox(height: 28),
 
@@ -113,10 +125,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     crossAxisSpacing: 14,
                     childAspectRatio: 1.3,
                     children: [
-                      StatBadgeCard(emoji: '🔥', value: '${profile.streakDays} Days', label: 'Streak'),
-                      StatBadgeCard(emoji: '⚡', value: '${profile.totalPoints} PTS', label: 'Total XP'),
-                      StatBadgeCard(emoji: '💪', value: '${profile.workoutsDone} Done', label: 'Workouts'),
-                      StatBadgeCard(emoji: '🏅', value: profile.levelTier, label: 'Level'),
+                      StatBadgeCard(
+                        emoji: '🔥',
+                        value: '${profile.streakDays} Days',
+                        label: 'Streak',
+                      ),
+                      StatBadgeCard(
+                        emoji: '⚡',
+                        value: '${profile.totalPoints} PTS',
+                        label: 'Total XP',
+                      ),
+                      StatBadgeCard(
+                        emoji: '💪',
+                        value: '${profile.workoutsDone} Done',
+                        label: 'Workouts',
+                      ),
+                      StatBadgeCard(
+                        emoji: '🏅',
+                        value: profile.levelTier,
+                        label: 'Level',
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -128,7 +156,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       border: Border.all(color: AppColors.surfaceBorder),
                     ),
                     child: ListTile(
-                      leading: const Icon(Icons.emoji_events_outlined, color: AppColors.accent),
+                      leading: const Icon(
+                        Icons.emoji_events_outlined,
+                        color: AppColors.accent,
+                      ),
                       title: const Text(
                         'MY JOURNEY & LEVELS',
                         style: TextStyle(
@@ -138,7 +169,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           letterSpacing: 0.5,
                         ),
                       ),
-                      trailing: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+                      trailing: const Icon(
+                        Icons.chevron_right,
+                        color: AppColors.textSecondary,
+                      ),
                       onTap: () {},
                     ),
                   ),
@@ -150,13 +184,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.accent,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                         elevation: 0,
                       ),
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => AvatarStoreScreen(controller: widget.controller),
+                          builder: (_) =>
+                              AvatarStoreScreen(controller: widget.controller),
                         ),
                       ),
                       child: const Text(
@@ -173,10 +210,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-          ),
-          bottomNavigationBar: AppBottomNavBar(
-            currentIndex: _navIndex,
-            onTap: (i) => setState(() => _navIndex = i),
           ),
         );
       },

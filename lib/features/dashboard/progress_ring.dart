@@ -1,11 +1,9 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
+import 'package:voz_app/core/theme/app_colors.dart';
 
-/// Circular progress ring used on the dashboard ("45% COMPLETED").
-/// Animates from 0 to [percent] when it first appears.
 class ProgressRing extends StatefulWidget {
-  final double percent; // 0..100
+  final double percent;
   final double size;
   final double strokeWidth;
 
@@ -35,7 +33,6 @@ class _ProgressRingState extends State<ProgressRing>
     _animation = Tween<double>(begin: 0, end: widget.percent / 100).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
-    // small delay before animating, matches the web version
     Future.delayed(const Duration(milliseconds: 200), () {
       if (mounted) _controller.forward();
     });
@@ -73,7 +70,6 @@ class _ProgressRingState extends State<ProgressRing>
               Text(
                 '${widget.percent.toInt()}%',
                 style: const TextStyle(
-                  fontFamily: 'Rajdhani',
                   fontWeight: FontWeight.w700,
                   fontSize: 40,
                   height: 1,
@@ -84,7 +80,6 @@ class _ProgressRingState extends State<ProgressRing>
               const Text(
                 'COMPLETED',
                 style: TextStyle(
-                  fontFamily: 'Rajdhani',
                   fontWeight: FontWeight.w600,
                   fontSize: 11,
                   letterSpacing: 2,
@@ -100,7 +95,7 @@ class _ProgressRingState extends State<ProgressRing>
 }
 
 class _RingPainter extends CustomPainter {
-  final double progress; // 0..1
+  final double progress;
   final double strokeWidth;
 
   _RingPainter({required this.progress, required this.strokeWidth});
@@ -117,9 +112,8 @@ class _RingPainter extends CustomPainter {
 
     canvas.drawCircle(center, radius, bgPaint);
 
-    // glow layer
     final glowPaint = Paint()
-      ..color = AppColors.pink.withOpacity(0.7)
+      ..color = AppColors.pink.withValues(alpha: 0.7)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round

@@ -22,4 +22,31 @@ class AppColors {
   // Background color for disabled cards or locked level items
   static const Color disabledCard = Color(0xFF181818);
   static const Color timerback = Color(0xFF2F1932);
+  
+  static const Color card = Color(0xFF1C1C1C);
+  static const Color border = Color(0xFF2E2E2E);
+
+  static const Color pink = Color(0xFFDF00FF);
+  static const Color orange = Color(0xFFFF6B35);
+  static const Color green = Color(0xFF00FF88);
+
+  static const Color grayLabel = Color(0xFF555555);
+  static const Color grayFill = Color(0xFF444444);
+  static const Color grayText = Color(0xFF888888);
+  static const Color grayDot = Color(0xFF2A2A2A);
+  static const Color lockedNode = Color(0xFF242424);
+  static const Color lockedIcon = Color(0xFF666666);
+
+  static const Color white = Color(0xFFFFFFFF);
+
+  static const surface = Color(0xFF161616);
+  static const surfaceBorder = Color(0xFF262626);
+
+  static const accent = Color(0xFFDA1EFF); // neon magenta/purple
+  static const accentSoft = Color(0x33DA1EFF);
+
+
+
+  static const danger = Color(0xFFFF4D4D);
+  static const lockedGrey = Color(0xFF4A4A4E);
 }

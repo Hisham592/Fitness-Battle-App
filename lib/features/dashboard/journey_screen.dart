@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../theme/app_colors.dart';
+import 'package:voz_app/core/theme/app_colors.dart';
 
 class JourneyScreen extends StatelessWidget {
   const JourneyScreen({super.key});
@@ -13,10 +12,10 @@ class JourneyScreen extends StatelessWidget {
         child: Column(
           children: [
             _JourneyTopBar(),
-            Expanded(
+            const Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 28, 20, 20),
-                child: const Column(
+                padding: EdgeInsets.fromLTRB(20, 28, 20, 20),
+                child: Column(
                   children: [
                     _LevelTimelineItem(
                       index: '1',
@@ -85,9 +84,9 @@ class _JourneyTopBar extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Text(
+          const Text(
             'MY JOURNEY',
-            style: GoogleFonts.rajdhani(
+            style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 13,
               letterSpacing: 2.08,
@@ -100,8 +99,6 @@ class _JourneyTopBar extends StatelessWidget {
   }
 }
 
-/// One row of the timeline: the numbered/locked node on the left,
-/// connected by a vertical line, and the level card on the right.
 class _LevelTimelineItem extends StatelessWidget {
   final String index;
   final bool isLocked;
@@ -142,7 +139,7 @@ class _LevelTimelineItem extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: isLocked
                           ? null
-                          : LinearGradient(
+                          : const LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
                               colors: [
@@ -196,11 +193,11 @@ class _Node extends StatelessWidget {
             ? null
             : [
                 BoxShadow(
-                  color: AppColors.pink.withOpacity(0.6),
+                  color: AppColors.pink.withValues(alpha: 0.6),
                   blurRadius: 24,
                 ),
                 BoxShadow(
-                  color: AppColors.pink.withOpacity(0.25),
+                  color: AppColors.pink.withValues(alpha: 0.25),
                   blurRadius: 48,
                 ),
               ],
@@ -210,10 +207,10 @@ class _Node extends StatelessWidget {
               size: 18, color: AppColors.lockedIcon)
           : Text(
               index,
-              style: GoogleFonts.rajdhani(
+              style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
-                color: const Color(0xFF111111),
+                color: Color(0xFF111111),
               ),
             ),
     );
@@ -244,11 +241,15 @@ class _LevelCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isLocked ? const Color(0xFF161616) : AppColors.pink.withOpacity(0.07),
+        color: isLocked
+            ? const Color(0xFF161616)
+            : AppColors.pink.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(16),
         border: Border(
           top: BorderSide(
-            color: isLocked ? AppColors.border : AppColors.pink.withOpacity(0.38),
+            color: isLocked
+                ? AppColors.border
+                : AppColors.pink.withValues(alpha: 0.38),
             width: 1,
           ),
         ),
@@ -258,15 +259,13 @@ class _LevelCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: GoogleFonts.rajdhani(
+            style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 17,
               color: isLocked ? const Color(0xFF555555) : AppColors.pink,
             ),
           ),
           const SizedBox(height: 8),
-
-          // active-only status row (green dot + text)
           if (!isLocked && statusText != null) ...[
             Row(
               children: [
@@ -281,7 +280,7 @@ class _LevelCard extends StatelessWidget {
                 const SizedBox(width: 6),
                 Text(
                   statusText!,
-                  style: GoogleFonts.barlow(
+                  style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.green,
                   ),
@@ -290,19 +289,16 @@ class _LevelCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
           ],
-
-          // locked-with-progress row ("Required XP")
           if (isLocked && statusText != null) ...[
             Text(
               statusText!,
-              style: GoogleFonts.barlow(
+              style: const TextStyle(
                 fontSize: 12,
-                color: const Color(0xFF555555),
+                color: Color(0xFF555555),
               ),
             ),
             const SizedBox(height: 6),
           ],
-
           if (xpLabel != null || xpValue != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 6),
@@ -310,9 +306,9 @@ class _LevelCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (xpLabel != null)
-                    Text(
+                     Text(
                       xpLabel!,
-                      style: GoogleFonts.barlow(
+                      style: TextStyle(
                         fontSize: 11,
                         color: AppColors.grayLabel,
                       ),
@@ -320,7 +316,7 @@ class _LevelCard extends StatelessWidget {
                   if (xpValue != null)
                     Text(
                       xpValue!,
-                      style: GoogleFonts.rajdhani(
+                      style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
                         color: isLocked
@@ -331,7 +327,6 @@ class _LevelCard extends StatelessWidget {
                 ],
               ),
             ),
-
           if (progress != null)
             ClipRRect(
               borderRadius: BorderRadius.circular(3),
@@ -343,11 +338,12 @@ class _LevelCard extends StatelessWidget {
                   widthFactor: progress!.clamp(0, 1),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: isLocked ? const Color(0xFF3A3A3A) : AppColors.pink,
+                      color:
+                          isLocked ? const Color(0xFF3A3A3A) : AppColors.pink,
                       boxShadow: isLocked
                           ? null
                           : [
-                              BoxShadow(
+                              const BoxShadow(
                                 color: AppColors.pink,
                                 blurRadius: 6,
                               ),
@@ -357,7 +353,6 @@ class _LevelCard extends StatelessWidget {
                 ),
               ),
             ),
-
           if (lockNote != null) ...[
             const SizedBox(height: 10),
             Row(
@@ -367,9 +362,9 @@ class _LevelCard extends StatelessWidget {
                 const SizedBox(width: 6),
                 Text(
                   lockNote!,
-                  style: GoogleFonts.barlow(
+                  style: const TextStyle(
                     fontSize: 11,
-                    color: const Color(0xFF555555),
+                    color: Color(0xFF555555),
                   ),
                 ),
               ],

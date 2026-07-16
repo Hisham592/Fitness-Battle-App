@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import '../../domain/entities/meal.dart';
 import '../../domain/usecases/get_smart_meals.dart';
-import '../../domain/usecases/log_meal_as_eaten.dart';
+
 
 // States
 abstract class NutritionState extends Equatable {
@@ -30,12 +30,9 @@ class NutritionError extends NutritionState {
 // Cubit
 class NutritionCubit extends Cubit<NutritionState> {
   final GetSmartMeals getSmartMealsUseCase;
-  final LogMealAsEaten logMealAsEatenUseCase;
 
-  NutritionCubit({
-    required this.getSmartMealsUseCase,
-    required this.logMealAsEatenUseCase,
-  }) : super(NutritionInitial());
+  NutritionCubit({required this.getSmartMealsUseCase})
+    : super(NutritionInitial());
 
   Future<void> loadSmartNutritionPlan() async {
     emit(NutritionLoading());
@@ -45,11 +42,5 @@ class NutritionCubit extends Cubit<NutritionState> {
     } catch (e) {
       emit(const NutritionError("Failed to fetch custom nutrition data."));
     }
-  }
-
-  Future<void> markAsEaten(String mealId) async {
-    try {
-      await logMealAsEatenUseCase(mealId);
-    } catch (_) {}
   }
 }

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:voz_app/features/dashboard/main_layout_screen.dart';
 import 'package:voz_app/features/onboarding_auth/data/services/auth_firebase_service.dart';
 import 'package:voz_app/features/onboarding_auth/logic/auth_cubit/auth_cubit.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/screens/onboarding_screen.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/screens/sign_in_screen.dart';
-import 'package:voz_app/features/onboarding_auth/presentation/screens/temp_dashboard_screen.dart';
 import 'package:voz_app/firebase_options.dart';
 import 'core/theme/app_colors.dart';
 
@@ -66,7 +66,7 @@ class VozApp extends StatelessWidget {
                         );
                       }
                       if (snapshot.hasData && snapshot.data != null) {
-                        return const TempDashboardScreen();
+                        return const MainLayoutScreen();
                       }
                       return const SignInScreen();
                     },

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../domain/entities/meal.dart';
 import '../widgets/meal_item_card.dart';
 import 'meal_details_screen.dart';
@@ -121,7 +120,7 @@ class _SmartNutritionScreenState extends State<SmartNutritionScreen> {
                 ),
               ),
             ),
-            Divider(color: Colors.grey.withOpacity(0.3), thickness: 1),
+            Divider(color: Colors.grey.withValues(alpha: 0.3), thickness: 1),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
               child: Row(
@@ -246,10 +245,12 @@ class _SmartNutritionScreenState extends State<SmartNutritionScreen> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: const Color(0xffDF00FF).withOpacity(0.1),
+                        color: const Color(0xffDF00FF).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(4.r),
                         border: Border.all(
-                          color: const Color(0xffDF00FF).withOpacity(0.22),
+                          color: const Color(
+                            0xffDF00FF,
+                          ).withValues(alpha: 0.22),
                           width: 1.w,
                         ),
                       ),
@@ -278,7 +279,7 @@ class _SmartNutritionScreenState extends State<SmartNutritionScreen> {
               child: ListView.separated(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
                 itemCount: displayMeals.length,
-                separatorBuilder: (_, __) => SizedBox(height: 16.h),
+                separatorBuilder: (_, _) => SizedBox(height: 16.h),
                 itemBuilder: (context, index) {
                   final meal = displayMeals[index];
                   return MealItemCard(
@@ -293,85 +294,6 @@ class _SmartNutritionScreenState extends State<SmartNutritionScreen> {
                   );
                 },
               ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: Color(0xff2E2E2E), width: 1.0)),
-        ),
-        child: BottomNavigationBar(
-          backgroundColor: const Color(0xFF181818),
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: const Color(0xffDF00FF),
-          unselectedItemColor: const Color(0xff555555),
-          selectedLabelStyle: TextStyle(
-            fontSize: 10.sp,
-            fontWeight: FontWeight.w600,
-          ),
-          unselectedLabelStyle: TextStyle(
-            fontSize: 10.sp,
-            fontWeight: FontWeight.w600,
-          ),
-          currentIndex: 2,
-          onTap: (index) {},
-          items: [
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/homeIcon.svg',
-                width: 20.w,
-                height: 20.h,
-                colorFilter: const ColorFilter.mode(
-                  Color(0xff555555),
-                  BlendMode.srcIn,
-                ),
-              ),
-              label: 'HOME',
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/workoutIcon.svg',
-                width: 20.w,
-                height: 20.h,
-                colorFilter: const ColorFilter.mode(
-                  Color(0xff555555),
-                  BlendMode.srcIn,
-                ),
-              ),
-              label: 'WORKOUT',
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/nutritionIconActive.svg',
-                height: 20.h,
-                colorFilter: const ColorFilter.mode(
-                  Color(0xff555555),
-                  BlendMode.srcIn,
-                ),
-              ),
-              activeIcon: SvgPicture.asset(
-                'assets/icons/nutritionIconActive.svg',
-                width: 20.w,
-                height: 20.h,
-                colorFilter: const ColorFilter.mode(
-                  Color(0xffDF00FF),
-                  BlendMode.srcIn,
-                ),
-              ),
-              label: 'NUTRITION',
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/profileIcon.svg',
-                width: 20.w,
-                height: 20.h,
-                colorFilter: const ColorFilter.mode(
-                  Color(0xff555555),
-                  BlendMode.srcIn,
-                ),
-              ),
-              label: 'PROFILE',
             ),
           ],
         ),
