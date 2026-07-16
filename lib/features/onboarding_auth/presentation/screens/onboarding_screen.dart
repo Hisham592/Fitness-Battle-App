@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voz_app/core/theme/app_colors.dart';
 import 'package:voz_app/features/onboarding_auth/data/models/onboarding_model.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/screens/sign_in_screen.dart';
@@ -32,7 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     super.dispose();
   }
 
-  void _onNextPressed() {
+  void _onNextPressed() async {
     if (_currentIndex < onboardingPages.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -43,6 +44,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         context,
         MaterialPageRoute(builder: (context) => const SignInScreen()),
       );
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isFirstTime', false);
     }
   }
 

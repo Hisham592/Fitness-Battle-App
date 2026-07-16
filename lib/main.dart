@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voz_app/features/onboarding_auth/data/services/auth_firebase_service.dart';
 import 'package:voz_app/features/onboarding_auth/logic/auth_cubit/auth_cubit.dart';
-import 'package:voz_app/features/onboarding_auth/presentation/screens/onboarding_screen.dart';
+import 'package:voz_app/features/onboarding_auth/presentation/screens/sign_in_screen.dart';
+import 'package:voz_app/features/onboarding_auth/presentation/screens/sign_up_screen.dart';
+import 'package:voz_app/features/onboarding_auth/presentation/screens/temp_dashboard_screen.dart';
 import 'package:voz_app/firebase_options.dart';
 import 'core/theme/app_colors.dart';
 
@@ -12,11 +16,29 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const VozApp());
+
+  final prefs = await SharedPreferences.getInstance();
+  final bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
+
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+
+  Widget initialScreen;
+
+  if (isFirstTime) {
+    initialScreen = const SignUpScreen();
+  } else if (currentUser != null) {
+    initialScreen = const TempDashboardScreen();
+  } else {
+    initialScreen = const SignInScreen();
+  }
+
+  runApp(VozApp(initialScreen: initialScreen));
 }
 
 class VozApp extends StatelessWidget {
-  const VozApp({super.key});
+  const VozApp({super.key, required this.initialScreen});
+
+  final Widget initialScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +67,8 @@ class VozApp extends StatelessWidget {
                 unselectedItemColor: AppColors.textSecondary,
               ),
             ),
-            home: OnboardingScreen(),
+            debugShowMaterialGrid: false,
+            home: initialScreen,
           ),
         );
       },
