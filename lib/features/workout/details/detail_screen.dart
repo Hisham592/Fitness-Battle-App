@@ -9,11 +9,9 @@ class ExerciseDetailScreen extends StatefulWidget {
   const ExerciseDetailScreen({
     super.key,
     required this.exercise,
-    this.onStartTimer,
   });
 
   final ExerciseData exercise;
-  final VoidCallback? onStartTimer;
 
   @override
   State<ExerciseDetailScreen> createState() => _ExerciseDetailScreenState();
@@ -40,75 +38,64 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _VideoPreview(exercise: widget.exercise),
-                    SizedBox(height: 20.h),
-                    Text(
-                      widget.exercise.name,
-                      style: TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: 26.sp,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.8,
-                      ),
-                    ),
-                    SizedBox(height: 14.h),
-                    Row(
-                      children: [
-                        _Tag('${widget.exercise.sets} SETS'),
-                        SizedBox(width: 8.w),
-                        _Tag('${widget.exercise.reps} REPS'),
-                        SizedBox(width: 8.w),
-                        _Tag(widget.exercise.tag),
-                      ],
-                    ),
-                    SizedBox(height: 16.h),
-                    Text(
-                      widget.exercise.description,
-                      style: TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    SizedBox(height: 22.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _MuscleCard(
-                            label: 'PRIMARY MUSCLE',
-                            muscle: widget.exercise.primaryMuscle,
-                            emoji: '💪',
-                          ),
-                        ),
-                        SizedBox(width: 12.w),
-                        Expanded(
-                          child: _MuscleCard(
-                            label: 'SECONDARY',
-                            muscle: widget.exercise.secondaryMuscle,
-                            emoji: '🦾',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _VideoPreview(exercise: widget.exercise),
+              SizedBox(height: 20.h),
+              Text(
+                widget.exercise.name,
+                style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontSize: 26.sp,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.8,
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 20.h),
-              child: _StartTimerButton(
-                onPressed: widget.onStartTimer ?? () {},
+              SizedBox(height: 14.h),
+              Row(
+                children: [
+                  _Tag('${widget.exercise.sets} SETS'),
+                  SizedBox(width: 8.w),
+                  _Tag('${widget.exercise.reps} REPS'),
+                  SizedBox(width: 8.w),
+                  _Tag(widget.exercise.tag),
+                ],
               ),
-            ),
-          ],
+              SizedBox(height: 16.h),
+              Text(
+                widget.exercise.description,
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              SizedBox(height: 22.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: _MuscleCard(
+                      label: 'PRIMARY MUSCLE',
+                      muscle: widget.exercise.primaryMuscle,
+                      emoji: '💪',
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                  Expanded(
+                    child: _MuscleCard(
+                      label: 'SECONDARY',
+                      muscle: widget.exercise.secondaryMuscle,
+                      emoji: '🦾',
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 24.h),
+            ],
+          ),
         ),
       ),
     );
@@ -164,26 +151,7 @@ class _VideoPreviewState extends State<_VideoPreview> {
         borderRadius: BorderRadius.circular(16.r),
         child: AspectRatio(
           aspectRatio: 16 / 9,
-          child: StreamBuilder<YoutubePlayerValue>(
-            stream: _controller.stream,
-            builder: (context, snapshot) {
-              final state = snapshot.data?.playerState;
-              final bool isReady = state == PlayerState.playing ||
-                  state == PlayerState.paused ||
-                  state == PlayerState.cued ||
-                  state == PlayerState.ended;
-
-              if (isReady) {
-                return YoutubePlayer(controller: _controller);
-              }
-
-              return Center(
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              );
-            },
-          ),
+          child: YoutubePlayer(controller: _controller),
         ),
       ),
     );
@@ -279,51 +247,6 @@ class _MuscleCard extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _StartTimerButton extends StatelessWidget {
-  const _StartTimerButton({required this.onPressed});
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).colorScheme.primary;
-
-    return SizedBox(
-      width: double.infinity,
-      height: 54.h,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.r),
-          color: primaryColor,
-          boxShadow: [
-            BoxShadow(
-              color: primaryColor.withValues(alpha: 0.6),
-              blurRadius: 24.r,
-            ),
-          ],
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(10.r),
-            onTap: onPressed,
-            child: Center(
-              child: Text(
-                'START TIMER',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 2,
-                ),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
