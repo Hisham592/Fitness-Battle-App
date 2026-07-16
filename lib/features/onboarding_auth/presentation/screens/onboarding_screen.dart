@@ -34,20 +34,24 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   void _onNextPressed() async {
-    if (_currentIndex < onboardingPages.length - 1) {
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      Navigator.push(
+  if (_currentIndex < onboardingPages.length - 1) {
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  } else {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isFirstTime', false);
+
+    if (mounted) {
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const SignInScreen()),
+        (route) => false,
       );
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isFirstTime', false);
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {

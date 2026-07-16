@@ -54,11 +54,11 @@ dev_dependencies:
 
 flutter_native_splash:
   color: "#121212"
-  image: assets/images/splashScreenLogo.svg
+  image: assets/images/splashScreenLogo.png
   
   android_12:
     color: "#121212"
-    image: assets/images/splashScreenLogo.svg
+    image: assets/images/splashScreenLogo.png
     
   web: false
 # For information on the generic Dart part of this file, see the
