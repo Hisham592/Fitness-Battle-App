@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:voz_app/core/theme/app_colors.dart';
 import 'package:intl/intl.dart';
+import 'package:voz_app/core/widgets/appbar_title_widget.dart';
 import 'package:voz_app/features/workout/achive/achivesceen.dart';
 import 'package:voz_app/features/workout/data.dart';
 import 'package:voz_app/features/workout/details/detail_screen.dart';
@@ -368,219 +369,235 @@ class _Level3WorkoutScreenState extends State<Level3WorkoutScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(
-          textAlign: TextAlign.center,
-          'WORKOUT',
-          style: TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 13.sp,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'Rajdhani',
+        title: AppBarTitleWidget(title: "WORKOUT"),
+        centerTitle: true,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(
+            height: 1,
+            color: Colors.grey.withValues(alpha: 0.3),
           ),
         ),
       ),
       body: SafeArea(
-          child: SingleChildScrollView(
-              child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.0.h, vertical: 16.0.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'LEVEL 3: EXPERT',
-              style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Rajdhani',
-              ),
-            ),
-            Text(
-              "Today's Focus: ${todayWorkout.isNotEmpty ? todayWorkout.first.primaryMuscle : 'Rest Day'}",
-              style: TextStyle(
-                color: AppColors.primaryNeon,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Barlow',
-              ),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: todayWorkout.length,
-              itemBuilder: (context, index) {
-                return Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(14.r),
-                    splashColor: AppColors.cardBackground.withValues(alpha: 0.3),
-                    highlightColor:
-                        AppColors.cardBackground.withValues(alpha: 0.15),
-                    hoverColor:
-                        AppColors.cardBackground.withValues(alpha: 0.08),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ExerciseDetailScreen(
-                            exercise: todayWorkout[index],
-                          ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0.h, vertical: 16.0.w),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'LEVEL 3: EXPERT',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Rajdhani',
+                  ),
+                ),
+                Text(
+                  "Today's Focus: ${todayWorkout.isNotEmpty ? todayWorkout.first.primaryMuscle : 'Rest Day'}",
+                  style: TextStyle(
+                    color: AppColors.primaryNeon,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Barlow',
+                  ),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: todayWorkout.length,
+                  itemBuilder: (context, index) {
+                    return Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(14.r),
+                        splashColor: AppColors.cardBackground.withValues(
+                          alpha: 0.3,
                         ),
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 8.0.w, vertical: 8.0.h),
-                      width: 336.w,
-                      height: 85.h,
-                      margin: EdgeInsets.symmetric(vertical: 12.0.h),
-                      decoration: BoxDecoration(
-                        color: AppColors.cardBackground,
-                        borderRadius: BorderRadius.circular(14.0.r),
-                        border: Border.all(
-                          color: AppColors.textSecondary
-                              .withValues(alpha: 0.2),
-                          width: 1.0.w,
+                        highlightColor: AppColors.cardBackground.withValues(
+                          alpha: 0.15,
                         ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(children: [
-                            Container(
-                              width: 60.w,
-                              height: 70.h,
-                              decoration: const BoxDecoration(
-                                color: Color(0xff11111A),
-                              ),
-                              child: Center(
-                                child: Image.asset(
-                                  todayWorkout[index].iconPath,
-                                ),
+                        hoverColor: AppColors.cardBackground.withValues(
+                          alpha: 0.08,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ExerciseDetailScreen(
+                                exercise: todayWorkout[index],
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0.w),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8.0.w,
+                            vertical: 8.0.h,
+                          ),
+                          width: 336.w,
+                          height: 85.h,
+                          margin: EdgeInsets.symmetric(vertical: 12.0.h),
+                          decoration: BoxDecoration(
+                            color: AppColors.cardBackground,
+                            borderRadius: BorderRadius.circular(14.0.r),
+                            border: Border.all(
+                              color: AppColors.textSecondary.withValues(
+                                alpha: 0.2,
+                              ),
+                              width: 1.0.w,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
                                 children: [
-                                  Text(
-                                    todayWorkout[index].name,
-                                    style: TextStyle(
-                                      color: AppColors.textPrimary,
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w700,
-                                      fontFamily: 'Rajdhani',
+                                  Container(
+                                    width: 60.w,
+                                    height: 70.h,
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xff11111A),
+                                    ),
+                                    child: Center(
+                                      child: Image.asset(
+                                        todayWorkout[index].iconPath,
+                                      ),
                                     ),
                                   ),
-                                  Text(
-                                    "${todayWorkout[index].sets} × ${todayWorkout[index].reps}",
-                                    style: TextStyle(
-                                      color: AppColors.primaryNeon,
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Barlow',
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0.w,
                                     ),
-                                  ),
-                                  Text(
-                                    "${todayWorkout[index].primaryMuscle}.${todayWorkout[index].secondaryMuscle}",
-                                    style: TextStyle(
-                                      color: AppColors.textSecondary,
-                                      fontSize: 11.sp,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Barlow',
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          todayWorkout[index].name,
+                                          style: TextStyle(
+                                            color: AppColors.textPrimary,
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: 'Rajdhani',
+                                          ),
+                                        ),
+                                        Text(
+                                          "${todayWorkout[index].sets} × ${todayWorkout[index].reps}",
+                                          style: TextStyle(
+                                            color: AppColors.primaryNeon,
+                                            fontSize: 12.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Barlow',
+                                          ),
+                                        ),
+                                        Text(
+                                          "${todayWorkout[index].primaryMuscle}.${todayWorkout[index].secondaryMuscle}",
+                                          style: TextStyle(
+                                            color: AppColors.textSecondary,
+                                            fontSize: 11.sp,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Barlow',
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ]),
-                          Container(
-                            width: 32.w,
-                            height: 32.h,
-                            decoration: BoxDecoration(
-                              color: AppColors.timerback,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppColors.primaryNeon,
-                                width: 2.0.w,
-                              ),
-                            ),
-                            child: Center(
-                              child: SvgPicture.asset(
-                                'assets/icons/timer icon.svg',
-                                width: 13.w,
-                                height: 13.h,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-            Center(
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(14.r),
-                  onTap: challengeCompleted
-                      ? null
-                      : () async {
-                          await WorkoutProgressService.finishWorkout();
-                          final streak =
-                              await WorkoutProgressService.getStreak();
-                          if (context.mounted) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => AchiveScreen(
-                                  xpEarned: 50,
-                                  streakDays: streak,
+                              Container(
+                                width: 32.w,
+                                height: 32.h,
+                                decoration: BoxDecoration(
+                                  color: AppColors.timerback,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: AppColors.primaryNeon,
+                                    width: 2.0.w,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: SvgPicture.asset(
+                                    'assets/icons/timer icon.svg',
+                                    width: 13.w,
+                                    height: 13.h,
+                                  ),
                                 ),
                               ),
-                            );
-                          }
-                          setState(() {
-                            challengeCompleted = true;
-                          });
-                        },
-                  child: Container(
-                    width: 336.w,
-                    height: 54.h,
-                    margin: EdgeInsets.symmetric(vertical: 12.h),
-                    decoration: BoxDecoration(
-                      color: AppColors.cardBackground,
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                Center(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
                       borderRadius: BorderRadius.circular(14.r),
-                      border: Border.all(
-                        color: AppColors.textSecondary
-                            .withValues(alpha: 0.2),
-                        width: 1.w,
+                      onTap: challengeCompleted
+                          ? null
+                          : () async {
+                              await WorkoutProgressService.finishWorkout();
+                              final streak =
+                                  await WorkoutProgressService.getStreak();
+                              if (context.mounted) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => AchiveScreen(
+                                      xpEarned: 50,
+                                      streakDays: streak,
+                                    ),
+                                  ),
+                                );
+                              }
+                              setState(() {
+                                challengeCompleted = true;
+                              });
+                            },
+                      child: Container(
+                        width: 336.w,
+                        height: 54.h,
+                        margin: EdgeInsets.symmetric(vertical: 12.h),
+                        decoration: BoxDecoration(
+                          color: AppColors.cardBackground,
+                          borderRadius: BorderRadius.circular(14.r),
+                          border: Border.all(
+                            color: AppColors.textSecondary.withValues(
+                              alpha: 0.2,
+                            ),
+                            width: 1.w,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            challengeCompleted
+                                ? 'CHALLENGE COMPLETED'
+                                : 'FINISH CHALLENGE',
+                            style: TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Rajdhani',
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    child: Center(
-                        child: Text(
-                      challengeCompleted
-                          ? 'CHALLENGE COMPLETED'
-                          : 'FINISH CHALLENGE',
-                      style: TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Rajdhani',
-                      ),
-                    )),
                   ),
                 ),
-              ),
-            )
-          ],
+              ],
+            ),
+          ),
         ),
-      ))),
+      ),
     );
   }
 }

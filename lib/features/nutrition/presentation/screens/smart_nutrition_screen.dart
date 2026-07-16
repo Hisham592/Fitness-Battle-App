@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:voz_app/core/widgets/appbar_title_widget.dart';
 import '../../domain/entities/meal.dart';
 import '../widgets/meal_item_card.dart';
 import 'meal_details_screen.dart';
@@ -103,201 +104,195 @@ class _SmartNutritionScreenState extends State<SmartNutritionScreen> {
     final displayMeals = _getSortedMeals();
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 20.h),
-              child: Center(
-                child: Text(
-                  'SMART NUTRITION',
+      appBar: AppBar(
+        title: AppBarTitleWidget(title: "SMART NUTRATION"),
+        centerTitle: true,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(
+            height: 1,
+            color: Colors.grey.withValues(alpha: 0.3),
+          ),
+        ),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '50+ local meals · Priced in EGP',
                   style: TextStyle(
                     fontSize: 14.sp,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 2.08,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xff444444),
                   ),
                 ),
-              ),
-            ),
-            Divider(color: Colors.grey.withValues(alpha: 0.3), thickness: 1),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '50+ local meals · Priced in EGP',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xff444444),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        backgroundColor: const Color(0xff181818),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20.r),
-                          ),
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: const Color(0xff181818),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20.r),
                         ),
-                        builder: (context) {
-                          return Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 24.w,
-                              vertical: 20.h,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Center(
-                                  child: Container(
-                                    width: 40.w,
-                                    height: 4.h,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xff555555),
-                                      borderRadius: BorderRadius.circular(2.r),
-                                    ),
+                      ),
+                      builder: (context) {
+                        return Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 24.w,
+                            vertical: 20.h,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Container(
+                                  width: 40.w,
+                                  height: 4.h,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xff555555),
+                                    borderRadius: BorderRadius.circular(2.r),
                                   ),
                                 ),
-                                SizedBox(height: 20.h),
-                                Text(
-                                  'Filter Meals By',
+                              ),
+                              SizedBox(height: 20.h),
+                              Text(
+                                'Filter Meals By',
+                                style: TextStyle(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(height: 16.h),
+
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.restart_alt,
+                                  color: Color(0xffDF00FF),
+                                ),
+                                title: Text(
+                                  'Default Order',
                                   style: TextStyle(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold,
                                     color: Colors.white,
+                                    fontSize: 16.sp,
                                   ),
                                 ),
-                                SizedBox(height: 16.h),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  setState(() {
+                                    _selectedFilter = 'Default';
+                                  });
+                                },
+                              ),
+                              const Divider(color: Color(0xff2E2E2E)),
 
-                                ListTile(
-                                  leading: const Icon(
-                                    Icons.restart_alt,
-                                    color: Color(0xffDF00FF),
-                                  ),
-                                  title: Text(
-                                    'Default Order',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.sp,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    setState(() {
-                                      _selectedFilter = 'Default';
-                                    });
-                                  },
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.local_fire_department,
+                                  color: Color(0xffDF00FF),
                                 ),
-                                const Divider(color: Color(0xff2E2E2E)),
+                                title: Text(
+                                  'Calories',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.sp,
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  setState(() {
+                                    _selectedFilter = 'Calories';
+                                  });
+                                },
+                              ),
+                              const Divider(color: Color(0xff2E2E2E)),
 
-                                ListTile(
-                                  leading: const Icon(
-                                    Icons.local_fire_department,
-                                    color: Color(0xffDF00FF),
-                                  ),
-                                  title: Text(
-                                    'Calories',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.sp,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    setState(() {
-                                      _selectedFilter = 'Calories';
-                                    });
-                                  },
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.payments,
+                                  color: Color(0xffDF00FF),
                                 ),
-                                const Divider(color: Color(0xff2E2E2E)),
-
-                                ListTile(
-                                  leading: const Icon(
-                                    Icons.payments,
-                                    color: Color(0xffDF00FF),
+                                title: Text(
+                                  'Price',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.sp,
                                   ),
-                                  title: Text(
-                                    'Price',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.sp,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    setState(() {
-                                      _selectedFilter = 'Price';
-                                    });
-                                  },
                                 ),
-                                SizedBox(height: 20.h),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xffDF00FF).withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(4.r),
-                        border: Border.all(
-                          color: const Color(
-                            0xffDF00FF,
-                          ).withValues(alpha: 0.22),
-                          width: 1.w,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 12.w,
-                          vertical: 6.h,
-                        ),
-                        child: Text(
-                          _selectedFilter == 'Default'
-                              ? 'FILTER'
-                              : 'BY ${_selectedFilter.toUpperCase()}',
-                          style: TextStyle(
-                            fontSize: 11.sp,
-                            color: const Color(0xffDF00FF),
-                            fontWeight: FontWeight.w600,
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  setState(() {
+                                    _selectedFilter = 'Price';
+                                  });
+                                },
+                              ),
+                              SizedBox(height: 20.h),
+                            ],
                           ),
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xffDF00FF).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(4.r),
+                      border: Border.all(
+                        color: const Color(0xffDF00FF).withValues(alpha: 0.22),
+                        width: 1.w,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 6.h,
+                      ),
+                      child: Text(
+                        _selectedFilter == 'Default'
+                            ? 'FILTER'
+                            : 'BY ${_selectedFilter.toUpperCase()}',
+                        style: TextStyle(
+                          fontSize: 11.sp,
+                          color: const Color(0xffDF00FF),
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Expanded(
-              child: ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-                itemCount: displayMeals.length,
-                separatorBuilder: (_, _) => SizedBox(height: 16.h),
-                itemBuilder: (context, index) {
-                  final meal = displayMeals[index];
-                  return MealItemCard(
-                    meal: meal,
-                    graphicContainerColor: meal.containerColor,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => MealDetailsScreen(meal: meal),
-                      ),
+          ),
+          Expanded(
+            child: ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+              itemCount: displayMeals.length,
+              separatorBuilder: (_, _) => SizedBox(height: 16.h),
+              itemBuilder: (context, index) {
+                final meal = displayMeals[index];
+                return MealItemCard(
+                  meal: meal,
+                  graphicContainerColor: meal.containerColor,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => MealDetailsScreen(meal: meal),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
+

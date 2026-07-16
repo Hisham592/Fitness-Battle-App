@@ -73,7 +73,7 @@ class _CompleteCard extends StatelessWidget {
         border: Border.all(color: AppColors.primaryNeon,width: 1.w),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primaryNeon.withOpacity(0.45),
+            color: AppColors.primaryNeon.withValues(alpha:0.45),
             blurRadius: 18,
             spreadRadius: 1.5,
           ),
@@ -138,10 +138,10 @@ class _GlowingCheck extends StatelessWidget {
       height: 76.h,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppColors.timerback.withOpacity(0.12),
+        color: AppColors.timerback.withValues(alpha:0.12),
         border: Border.all(color: AppColors.primaryNeon, width: 2),
         boxShadow: [
-          BoxShadow(color: AppColors.primaryNeon.withOpacity(0.60), blurRadius: 48, spreadRadius: 2),
+          BoxShadow(color: AppColors.primaryNeon.withValues(alpha:0.60), blurRadius: 48, spreadRadius: 2),
         ],
       ),
       child: Center(
@@ -209,7 +209,7 @@ class _ReturnButton extends StatelessWidget {
           
           boxShadow: [
             BoxShadow(
-              color: AppColors.primaryNeon.withOpacity(0.6),
+              color: AppColors.primaryNeon.withValues(alpha:0.6),
               blurRadius: 24,
             ),
           ],
@@ -223,7 +223,7 @@ class _ReturnButton extends StatelessWidget {
               child: Text(
                 'RETURN TO DASHBOARD ',
                 style: TextStyle(
-                  color: Color(0xff0000000),
+                  color: Color(0xff000000),
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1.8,

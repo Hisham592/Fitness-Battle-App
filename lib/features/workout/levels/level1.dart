@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:voz_app/core/theme/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:voz_app/core/widgets/appbar_title_widget.dart';
 import 'package:voz_app/features/workout/achive/achivesceen.dart';
 import 'package:voz_app/features/workout/data.dart';
 import 'package:voz_app/features/workout/details/detail_screen.dart';
@@ -368,14 +369,13 @@ class _Level1WorkoutScreenState extends State<Level1WorkoutScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(
-          textAlign: TextAlign.center,
-          'WORKOUT',
-          style: TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 13.sp,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'Rajdhani',
+        title: AppBarTitleWidget(title: "WORKOUT"),
+        centerTitle: true,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(
+            height: 1,
+            color: Colors.grey.withValues(alpha: 0.3),
           ),
         ),
       ),
