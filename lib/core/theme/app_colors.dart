@@ -21,4 +21,5 @@ class AppColors {
 
   // Background color for disabled cards or locked level items
   static const Color disabledCard = Color(0xFF181818);
+  static const Color timerback = Color(0xFF2F1932);
 }

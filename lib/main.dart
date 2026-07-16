@@ -29,6 +29,7 @@ class VozApp extends StatelessWidget {
   final bool isFirstTime;
 
   @override
+
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(390, 844),

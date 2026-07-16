@@ -44,6 +44,10 @@ dependencies:
   firebase_auth: ^6.5.6
   cloud_firestore: ^6.7.1
   flutter_svg: ^2.3.0
+  intl: ^0.20.3
+  equatable: ^2.1.0
+  video_player: ^2.13.0
+  youtube_player_flutter: ^10.0.1
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +81,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/animations/
+    - assets/icons/exercises/
 
 
   fonts:
