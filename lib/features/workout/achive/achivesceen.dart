@@ -90,18 +90,18 @@ class _CompleteCard extends StatelessWidget {
               fontSize: 11.sp,
               fontWeight: FontWeight.w600,
               letterSpacing: 2.42,
-              fontFamily: 'Rajdhani',
+              fontFamily: 'VOZFont',
             ),
           ),
           const SizedBox(height: 7),
           Text(
-            '+$xpEarned XP COLLECTED!\nSTREAK MAINTAINED!',
+            '+$xpEarned XP & PTS COLLECTED!\nSTREAK MAINTAINED!',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 27.sp,
               fontWeight: FontWeight.w700,
-              fontFamily: 'Rajdhani',
+              fontFamily: 'VOZFont',
             ),
           ),
           Text(
@@ -111,16 +111,13 @@ class _CompleteCard extends StatelessWidget {
               color: AppColors.textSecondary,
               fontSize: 12.sp,
               fontWeight: FontWeight.w400,
-              fontFamily: 'barlow',
+              fontFamily: 'VOZFont',
             ),
           ),
           const SizedBox(height: 20),
           _StreakPill(streakDays: streakDays),
           const SizedBox(height: 22),
-          _ReturnButton(
-            onPressed: onReturn,
-            color: primaryColor,
-          ),
+          _ReturnButton(onPressed: onReturn, color: primaryColor),
         ],
       ),
     );
@@ -186,7 +183,7 @@ class _StreakPill extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFFFF6C36),
               fontSize: 13,
-              fontFamily: 'Rajdhani',
+              fontFamily: 'VOZFont',
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -210,10 +207,7 @@ class _ReturnButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
         color: color,
         boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.6),
-            blurRadius: 24,
-          ),
+          BoxShadow(color: color.withValues(alpha: 0.6), blurRadius: 24),
         ],
       ),
       child: Material(
