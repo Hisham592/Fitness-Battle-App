@@ -58,12 +58,21 @@ class UserModel {
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
+    final int currentXp = map['xp'] ?? 0;
+    String dynamicLevel = 'Beginner';
+
+    if (currentXp >= 5000) {
+      dynamicLevel = 'Advanced';
+    } else if (currentXp >= 1500) {
+      dynamicLevel = 'Intermediate';
+    }
+
     return UserModel(
       uid: map['uid'] ?? '',
       name: map['name'] ?? '',
       email: map['email'] ?? '',
-      level: map['level'] ?? 'Beginner',
-      xp: map['xp'] ?? 0,
+      level: dynamicLevel,
+      xp: currentXp,
       points: map['points'] ?? 0,
       createdAt: map['createdAt'] ?? '',
       streak: map['streak'] ?? 0,

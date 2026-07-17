@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:voz_app/features/workout/levels/level1.dart';
+import 'package:voz_app/features/workout/exercise_datasets.dart';
 
 bool challengeCompleted = false;
 

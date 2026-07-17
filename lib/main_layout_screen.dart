@@ -6,7 +6,7 @@ import 'package:voz_app/features/dashboard/dashboard_screen.dart';
 import 'package:voz_app/features/nutrition/presentation/screens/smart_nutrition_screen.dart';
 import 'package:voz_app/features/profile/controllers/profile_controller.dart';
 import 'package:voz_app/features/profile/screens/profile_screen.dart';
-import 'package:voz_app/features/workout/levels/level1.dart';
+import 'package:voz_app/features/workout/workout_screen.dart';
 
 class MainLayoutController extends InheritedWidget {
   final void Function(int index) switchTab;
@@ -43,7 +43,7 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
 
   final List<Widget> _screens = [
     const DashboardScreen(),
-    const Level1WorkoutScreen(),
+    const WorkoutScreen(),
     const SmartNutritionScreen(),
     ProfileScreen(controller: ProfileController()),
   ];

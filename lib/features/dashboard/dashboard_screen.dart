@@ -8,7 +8,7 @@ import 'package:voz_app/core/theme/app_colors.dart';
 import 'package:voz_app/core/widgets/appbar_title_widget.dart';
 import 'package:voz_app/main_layout_screen.dart';
 import 'package:voz_app/features/dashboard/progress_ring.dart';
-import 'package:voz_app/features/workout/levels/level1.dart';
+import 'package:voz_app/features/workout/exercise_datasets.dart';
 import 'journey_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -59,8 +59,8 @@ class DashboardScreen extends StatelessWidget {
         }
 
         final data = snapshot.data!.data() as Map<String, dynamic>;
-        final String level = data['level'] ?? 'Beginner';
         final int xp = data['xp'] ?? 0;
+        final String level = xp >= 5000 ? 'Advanced' : (xp >= 1500 ? 'Intermediate' : 'Beginner');
         final int streak = data['streak'] ?? 0;
         final int daysCount = data['daysCount'] ?? 1;
         final List<String> completedDays =
