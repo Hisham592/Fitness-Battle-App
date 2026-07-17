@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 import 'package:voz_app/core/theme/app_colors.dart';
 import 'package:voz_app/core/widgets/appbar_title_widget.dart';
@@ -13,7 +14,6 @@ import 'package:voz_app/features/profile/controllers/profile_controller.dart';
 import 'package:voz_app/features/profile/screens/avatar_store_screen.dart';
 import 'package:voz_app/features/profile/screens/settings_screen.dart';
 import 'package:voz_app/features/profile/widgets/stat_badge_card.dart';
-
 
 class ProfileScreen extends StatefulWidget {
   final ProfileController controller;
@@ -66,9 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
-                    child: CircularProgressIndicator(
-                      color: primaryColor,
-                    ),
+                    child: CircularProgressIndicator(color: primaryColor),
                   );
                 }
 
@@ -86,6 +84,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 final firebaseUser = UserModel.fromMap(
                   snapshot.data!.data() as Map<String, dynamic>,
                 );
+
+                final DateTime? parsedDate = DateTime.tryParse(
+                  firebaseUser.createdAt,
+                );
+                final String formattedDate = parsedDate != null
+                    ? DateFormat('dd - MMMM - yyyy').format(parsedDate)
+                    : "";
 
                 return SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
@@ -110,9 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: primaryColor.withValues(
-                                    alpha: 0.55,
-                                  ),
+                                  color: primaryColor.withValues(alpha: 0.55),
                                   blurRadius: 28.r,
                                   spreadRadius: 2.r,
                                 ),
@@ -135,9 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: primaryColor,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: primaryColor.withValues(
-                                      alpha: 0.6,
-                                    ),
+                                    color: primaryColor.withValues(alpha: 0.6),
                                     blurRadius: 10.r,
                                   ),
                                 ],
@@ -162,7 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       SizedBox(height: 6.h),
                       Text(
-                        'Member since ${firebaseUser.createdAt.length >= 10 ? firebaseUser.createdAt.substring(0, 4) : ""}',
+                        'Member since $formattedDate',
                         style: TextStyle(
                           color: AppColors.textSecondary,
                           fontSize: 13.sp,
@@ -205,7 +206,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         clipBehavior: Clip.antiAlias,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16.r),
-                          side: const BorderSide(color: AppColors.surfaceBorder),
+                          side: const BorderSide(
+                            color: AppColors.surfaceBorder,
+                          ),
                         ),
                         child: ListTile(
                           leading: Icon(
