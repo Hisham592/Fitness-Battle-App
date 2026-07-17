@@ -1,13 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:voz_app/core/theme/app_colors.dart';
 import 'package:voz_app/core/theme/theme_cubit.dart';
 import 'package:voz_app/core/widgets/appbar_title_widget.dart';
 import 'package:voz_app/features/onboarding_auth/presentation/screens/sign_in_screen.dart';
-
-import '../../../core/theme/app_colors.dart';
-import '../controllers/profile_controller.dart';
+import 'package:voz_app/features/profile/controllers/profile_controller.dart';
 
 class SettingsScreen extends StatefulWidget {
   final ProfileController controller;
@@ -131,7 +132,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             shape: BoxShape.circle,
                             color: color,
                             border: Border.all(
-                              color: isSelected ? Colors.white : Colors.transparent,
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.transparent,
                               width: 3.w,
                             ),
                             boxShadow: [
@@ -157,8 +160,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ? AppColors.textPrimary
                                 : AppColors.textSecondary,
                             fontSize: 11.sp,
-                            fontWeight:
-                                isSelected ? FontWeight.w700 : FontWeight.w500,
+                            fontWeight: isSelected
+                                ? FontWeight.w700
+                                : FontWeight.w500,
                           ),
                         ),
                       ],
@@ -222,7 +226,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     subtitle: Text(
                       'Daily workout reminders',
-                      style: TextStyle(color: AppColors.textSecondary, fontSize: 13.sp),
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 13.sp,
+                      ),
                     ),
                     secondary: Icon(
                       Icons.notifications_none_rounded,
@@ -410,11 +417,12 @@ class _SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
+    return Material(
+      color: AppColors.surface,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.surfaceBorder, width: 1.w),
+        side: BorderSide(color: AppColors.surfaceBorder, width: 1.w),
       ),
       child: child,
     );

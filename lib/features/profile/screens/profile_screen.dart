@@ -1,17 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:voz_app/core/theme/app_colors.dart';
 import 'package:voz_app/core/widgets/appbar_title_widget.dart';
 import 'package:voz_app/core/widgets/custom_neon_button.dart';
 import 'package:voz_app/features/dashboard/journey_screen.dart';
 import 'package:voz_app/features/onboarding_auth/data/models/user_model.dart';
 import 'package:voz_app/features/profile/controllers/profile_controller.dart';
+import 'package:voz_app/features/profile/screens/avatar_store_screen.dart';
+import 'package:voz_app/features/profile/screens/settings_screen.dart';
 import 'package:voz_app/features/profile/widgets/stat_badge_card.dart';
 
-import 'avatar_store_screen.dart';
-import 'settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final ProfileController controller;
@@ -198,11 +200,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                       SizedBox(height: 16.h),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.surface,
+                      Material(
+                        color: AppColors.surface,
+                        clipBehavior: Clip.antiAlias,
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16.r),
-                          border: Border.all(color: AppColors.surfaceBorder),
+                          side: const BorderSide(color: AppColors.surfaceBorder),
                         ),
                         child: ListTile(
                           leading: Icon(
